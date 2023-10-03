@@ -10,7 +10,7 @@ def ConverterCor(Value):
         case 'black':
             return 2
 
-def GetLances(NumLances, ReturnType='var', Values=['roll', 'color', 'created_at']):
+def Get(NumLances, ReturnType='var', Values=['roll', 'color', 'created_at']):
     UltimosLances = []
     if NumLances < 300:
         result_json = (requests.get("https://blaze-1.com/api/roulette_games/history")).json()

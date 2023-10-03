@@ -11,123 +11,34 @@ from keras.optimizers import Adagrad, SGD
 
 import matplotlib.pyplot as plt
 
-import BlazeFunctions.LancesBlaze as lb
+import BlazeFunctions.Lances as Lances
 
-np.set_printoptions(threshold=np.inf)
+from BlazeFunctions.IA import PlotarGraficos
+from BlazeFunctions.IA import SepararTreinamento
+from BlazeFunctions.IA import EncapsularSequencias
 
-def PlotarGraficos(history, modelName):
-  losses = history.history['loss']
-  val_losses = history.history['val_loss']
-  accuracies = history.history['accuracy']
-  val_accuracies = history.history['val_accuracy']
-
-  # Plotando as perdas
-  plt.figure(figsize=(12, 6))
-  plt.subplot(1, 2, 1)
-  plt.plot(history.epoch, losses, label='Loss', color='blue', marker='o')
-  plt.plot(history.epoch, val_losses, label='Val_Loss', color='green', marker='o')
-  plt.title('Loss Over Time '+ modelName)
-  plt.xlabel('Epoch')
-  plt.ylabel('Loss')
-  plt.legend()
-
-  # Plotando as métricas de precisão
-  plt.subplot(1, 2, 2)
-  plt.plot(history.epoch, accuracies, label='Accuracy', color='blue', marker='o')
-  plt.plot(history.epoch, val_accuracies, label='Val_Accuracie', color='green', marker='o')
-  plt.title('Accuracy Over Time '+ modelName)
-  plt.xlabel('Epoch')
-  plt.ylabel('Accuracy')
-  plt.legend()
-
-  plt.tight_layout()
-  plt.show()
-
-
-def SepararTreinamento(input, input_dim, input_type='cor', input_val_rate=0.2, return_lst=['train_x','train_y']):
-  split_val = int(len(input) * input_val_rate)
-  input_val = input[:split_val]
-  input = input[split_val:]
-  if input_type == 'cor':
-    train_x = [input[i:i + input_dim] for i in range(0,len(input)-input_dim+1)]
-    val_x = [input_val[i:i + input_dim] for i in range(0,len(input_val)-input_dim+1)]
-
-
-  train_y = []
-  for i in train_x[1:]:
-    match input_type:
-      case 'cor':
-        match i[input_dim-1]:
-          case 0:
-            train_y.append([0,0])
-          # case 1 | 2 | 3 | 4 | 5 | 6 | 7:
-          case 1:
-            train_y.append([1,0])
-          # case 8 | 9 | 10 | 11 | 12 | 13 | 14:
-          case 2:
-            train_y.append([0,1])
-
-          case 1:
-            train_y.append(1)
-          case _:
-            train_y.append(0)
-
-
-
-  val_y = []
-  for i in val_x[1:]:
-    match input_type:
-      case 'cor':
-        match i[input_dim-1]:
-          case 0:
-            val_y.append([0,0])
-          # case 1 | 2 | 3 | 4 | 5 | 6 | 7:
-          case 1:
-            val_y.append([1,0])
-          # case 8 | 9 | 10 | 11 | 12 | 13 | 14:
-          case 2:
-            val_y.append([0,1])
-
-
-
-  train_x = train_x[:-1]
-  val_x = val_x[:-1]
-
-  output = []
-  for item in return_lst:
-     match item:
-        case 'train_x':
-           output.append(train_x)
-        case 'val_x':
-           output.append(val_x)
-        case 'train_y':
-           output.append(train_y)
-        case 'val_y':
-           output.append(val_y)
-
-
-  return tuple(output)
-
+# np.set_printoptions(threshold=np.inf)
    
   
-input_dim = 5
+input_size = 5
 
-LancesBlaze = lb.GetLances(100)
+LancesBlaze = Lances.Get(100, ReturnType='cor')
 
-train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_dim=input_dim, return_lst=['train_x','val_x', 'train_y', 'val_y'])
+train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
 
+train_x = np.array(EncapsularSequencias(train_x))
+val_x = np.array(EncapsularSequencias(val_x))
+
+train_y = np.array(train_y)
+val_y = np.array(val_y)
 
 model = Sequential()
 
 model.add(BatchNormalization())
-model.add(LSTM(units=64, input_shape=(None, 5)))
+model.add(LSTM(units=64))
 
 
-predict_input = lb.GetLances(input_dim)
-
-print(train_x)
-
-quit()
+predict_input = Lances.Get(input_size,ReturnType='cor')
 
 lr = 0.009
 
@@ -160,7 +71,7 @@ def ComandosFinais():
       case 'c':
         quit()
       case 't':
-        input_layer = lb.GetLances(30)
+        input_layer = Lances.Get(30)
         input_layer_1 = np.array(input_layer[0:5]).reshape(1,5)
         input_layer_2 = np.array(input_layer[5:10]).reshape(1,5)
         input_layer_3 = np.array(input_layer[10:15]).reshape(1,5)
