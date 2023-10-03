@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "c:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\Bot_v2.py", line 737, in <module>
+    model = load_model(ModelPath)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\site-packages\keras\src\saving\saving_api.py", line 262, in load_model
+    return legacy_sm_saving_lib.load_model(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\site-packages\keras\src\utils\traceback_utils.py", line 70, in error_handler
+    raise e.with_traceback(filtered_tb) from None
+  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\site-packages\keras\src\saving\legacy\save.py", line 234, in load_model
+    raise IOError(
+OSError: No file or directory found at model_5n_2l.keras
