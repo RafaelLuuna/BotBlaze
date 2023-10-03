@@ -7,15 +7,11 @@ import keras
 from keras.models import Sequential
 from keras.models import load_model
 from keras.layers import Dense, Dropout, LeakyReLU, LSTM, BatchNormalization
-from keras.callbacks import ModelCheckpoint
 from keras.optimizers import Adagrad, SGD
-from keras.callbacks import Callback
-import keras.backend as K
-
-import copy
 
 import matplotlib.pyplot as plt
 
+import BlazeFunctions.LancesBlaze as lb
 
 np.set_printoptions(threshold=np.inf)
 
@@ -47,45 +43,6 @@ def PlotarGraficos(history, modelName):
   plt.tight_layout()
   plt.show()
 
-def CarregarLances(NumLances, ReturnType='cor'):
-    UltimosLances = []
-    if NumLances < 300:
-      result_json = (requests.get("https://blaze-1.com/api/roulette_games/history")).json()
-      resultados = reversed(result_json['records'])
-      for resultado in resultados:
-          match ReturnType:
-              case 'cor':
-                  match resultado['color']:
-                      case 'white':
-                          UltimosLances.append(0)
-                      case 'red':
-                          UltimosLances.append(1)
-                      case 'black':
-                          UltimosLances.append(2)
-              case 'numero':
-                  UltimosLances.append(resultado['roll'])
-
-    else:
-      total_pages = int(NumLances / 300) + 1
-      for page in reversed(range(1, total_pages+1)):
-          result_json = (requests.get("https://blaze-1.com/api/roulette_games/history?page=" + str(page))).json()
-          resultados = reversed(result_json['records'])
-          print('page :',page)
-          for resultado in resultados:
-            Cor = 0
-            match ReturnType:
-              case 'cor':
-                  match resultado['color']:
-                      case 'white':
-                          UltimosLances.append(0)
-                      case 'red':
-                          UltimosLances.append(1)
-                      case 'black':
-                          UltimosLances.append(2)
-              case 'numero':
-                  UltimosLances.append(resultado['roll'])
-    UltimosLances = UltimosLances[len(UltimosLances)-NumLances:]
-    return UltimosLances
 
 def SepararTreinamento(input, input_dim, input_type='cor', input_val_rate=0.2, return_lst=['train_x','train_y']):
   split_val = int(len(input) * input_val_rate)
@@ -155,7 +112,7 @@ def SepararTreinamento(input, input_dim, input_type='cor', input_val_rate=0.2, r
   
 input_dim = 5
 
-LancesBlaze = CarregarLances(100)
+LancesBlaze = lb.GetLances(100)
 
 train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_dim=input_dim, return_lst=['train_x','val_x', 'train_y', 'val_y'])
 
@@ -166,7 +123,7 @@ model.add(BatchNormalization())
 model.add(LSTM(units=64, input_shape=(None, 5)))
 
 
-predict_input = CarregarLances(input_dim)
+predict_input = lb.GetLances(input_dim)
 
 print(train_x)
 
@@ -203,7 +160,7 @@ def ComandosFinais():
       case 'c':
         quit()
       case 't':
-        input_layer = CarregarLances(30)
+        input_layer = lb.GetLances(30)
         input_layer_1 = np.array(input_layer[0:5]).reshape(1,5)
         input_layer_2 = np.array(input_layer[5:10]).reshape(1,5)
         input_layer_3 = np.array(input_layer[10:15]).reshape(1,5)
