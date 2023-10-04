@@ -30,7 +30,8 @@ train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_size
 val_x = np.array(AgruparSequancias(val_x,5))
 
 print(LancesBlaze[:50])
-print(val_x[0])
+print(val_x[0:2])
+print(val_y[0:2])
 
 quit()
 

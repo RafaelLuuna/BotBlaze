@@ -1,14 +1,24 @@
 import requests
 import numpy as np
 
-def ConverterCor(Value):
-    match Value:
-        case 'white':
-            return 0
-        case 'red':
-            return 1
-        case 'black':
-            return 2
+def ConverterCor(Value, input_type='string', output_type='int'):
+    strings = ['white', 'red', 'black']
+    numbers = [0,1,2]
+    IA_numbers = [[0,0],[1,0],[0,1]]
+    
+    ColorTypes = {'string':strings,
+                   'number':numbers,
+                   'IA_number':IA_numbers
+                   }
+
+    Color = '#N/D'
+
+    for i in ColorTypes[input_type]:
+        if Value == i:
+            Color =  ColorTypes[output_type]
+            
+    return Color
+
 
 def Get(NumLances, ReturnType='var', Values=['roll', 'color', 'created_at']):
     UltimosLances = []

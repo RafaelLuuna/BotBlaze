@@ -98,19 +98,20 @@ def EncapsularSequencias(input):
     
     return output
 
-def AgruparSequancias(input, group_size):
+def AgruparSequancias(input_x, input_y, group_size):
     if group_size <= 0:
         group_size = 1
-    output = []
+    output_x = []
+    output_y = []
     group = []
     index = 0
     i = 0
-    while index < len(input):
-        group.append(input[index])
+    while index < len(input_x):
+        group.append(input_x[index])
         i += 1
         index += 1
         if i == group_size:
-            output.append(group)
+            output_x.append(group)
             group = []
             i = 0
-    return output
+    return output_x
