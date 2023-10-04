@@ -90,6 +90,8 @@ def ComandosFinais():
 ComandosFinais()
 
 quit()
+
+#################################### A PARTIR DAQUI É TUDO TESTE, PODE IGNORAR ####################################
 # learning_rates = [5, 2, 0.5, 0.01]
 # optimizers = [SGD(learning_rate=lr, momentum=0.9) for lr in learning_rates]
 
