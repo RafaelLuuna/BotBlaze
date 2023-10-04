@@ -21,23 +21,22 @@ from BlazeFunctions.IA import AgruparSequancias
 # np.set_printoptions(threshold=np.inf)
    
   
-input_size = 5
+input_size = 7
 
 LancesBlaze = Lances.Get(600, ReturnType='cor')
 
 train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
 
-val_x = np.array(AgruparSequancias(val_x,5))
+val_x, val_y = AgruparSequancias(val_x, val_y,2)
 
-print(LancesBlaze[:50])
-print(val_x[0:2])
-print(val_y[0:2])
 
-quit()
 
-train_x = np.array(EncapsularSequencias(train_x))
-val_x = np.array(EncapsularSequencias(val_x))
 
+# train_x = np.array(EncapsularSequencias(train_x))
+# val_x = np.array(EncapsularSequencias(val_x))
+
+train_x = np.array(train_x)
+val_x = np.array(val_x)
 train_y = np.array(train_y)
 val_y = np.array(val_y)
 

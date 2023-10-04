@@ -1,21 +1,21 @@
 import requests
 import numpy as np
 
-def ConverterCor(Value, input_type='string', output_type='int'):
+def ConverterCor(input, input_type='string', output_type='int'):
     strings = ['white', 'red', 'black']
     numbers = [0,1,2]
     IA_numbers = [[0,0],[1,0],[0,1]]
     
     ColorTypes = {'string':strings,
-                   'number':numbers,
-                   'IA_number':IA_numbers
+                   'int':numbers,
+                   'IA':IA_numbers
                    }
 
     Color = '#N/D'
 
-    for i in ColorTypes[input_type]:
-        if Value == i:
-            Color =  ColorTypes[output_type]
+    for i, Value in enumerate(ColorTypes[input_type]):
+        if input == Value:
+            Color =  ColorTypes[output_type][i]
             
     return Color
 

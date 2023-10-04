@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import BlazeFunctions.Lances as Lances
 
 def PlotarGraficos(history, modelName):
     losses = history.history['loss']
@@ -37,38 +38,18 @@ def SepararTreinamento(input, input_size, input_type='cor', val_percent=0.2, ret
         split_val = input_size +1
     input_val = input[:split_val]
     input = input[split_val:]
-    if input_type == 'cor':
-        train_x = [input[i:i + input_size] for i in range(0,len(input)-input_size+1)]
-        val_x = [input_val[i:i + input_size] for i in range(0,len(input_val)-input_size+1)]
+
+    train_x = [input[i:i + input_size] for i in range(0,len(input)-input_size+1)]
+    val_x = [input_val[i:i + input_size] for i in range(0,len(input_val)-input_size+1)]
 
 
     train_y = []
     for i in train_x[1:]:
-        match input_type:
-            case 'cor':
-                match i[input_size-1]:
-                    case 0:
-                        train_y.append([0,0])
-                    # case 1 | 2 | 3 | 4 | 5 | 6 | 7:
-                    case 1:
-                        train_y.append([1,0])
-                    # case 8 | 9 | 10 | 11 | 12 | 13 | 14:
-                    case 2:
-                        train_y.append([0,1])
+        train_y.append(Lances.ConverterCor(i[input_size-1],input_type='int',output_type='IA'))
         
     val_y = []
     for i in val_x[1:]:
-        match input_type:
-            case 'cor':
-                match i[input_size-1]:
-                    case 0:
-                        val_y.append([0,0])
-                    # case 1 | 2 | 3 | 4 | 5 | 6 | 7:
-                    case 1:
-                        val_y.append([1,0])
-                    # case 8 | 9 | 10 | 11 | 12 | 13 | 14:
-                    case 2:
-                        val_y.append([0,1])
+        val_y.append(Lances.ConverterCor(i[input_size-1],input_type='int',output_type='IA'))
 
 
 
@@ -106,12 +87,15 @@ def AgruparSequancias(input_x, input_y, group_size):
     group = []
     index = 0
     i = 0
-    while index < len(input_x):
+    while index < len(input_x)-1:
         group.append(input_x[index])
         i += 1
         index += 1
         if i == group_size:
             output_x.append(group)
+            output_y.append(input_y[index - 1])
+
             group = []
             i = 0
-    return output_x
+    return output_x, output_y
+        
