@@ -36,9 +36,10 @@ model = Sequential()
 
 model.add(BatchNormalization())
 model.add(LSTM(units=64))
+model.add(Dense(10,activation='tanh'))
+model.add(Dense(2, activation='sigmoid'))
 
-
-predict_input = Lances.Get(input_size,ReturnType='cor')
+# predict_input = Lances.Get(input_size,ReturnType='cor')
 
 lr = 0.009
 
@@ -47,7 +48,7 @@ Adagrad_optimizer = Adagrad(learning_rate=lr)
 
 model.compile(loss='mse', optimizer=Adagrad_optimizer, metrics=['accuracy'],run_eagerly=True)
 
-history = model.fit(train_x, train_y, epochs=20) #,validation_data=(val_x,val_y)
+history = model.fit(train_x, train_y, epochs=20,validation_data=(val_x,val_y))
 
 
 
