@@ -20,9 +20,9 @@ from BlazeFunctions.IA import EncapsularSequencias
 # np.set_printoptions(threshold=np.inf)
    
   
-input_size = 5
+input_size = 50
 
-LancesBlaze = Lances.Get(100, ReturnType='cor')
+LancesBlaze = Lances.Get(10000, ReturnType='cor')
 
 train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
 
