@@ -1,4 +1,4 @@
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 def PlotarGraficos(history, modelName):
     losses = history.history['loss']
