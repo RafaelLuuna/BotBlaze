@@ -16,16 +16,23 @@ import BlazeFunctions.Lances as Lances
 from BlazeFunctions.IA import PlotarGraficos
 from BlazeFunctions.IA import SepararTreinamento
 from BlazeFunctions.IA import EncapsularSequencias
+from BlazeFunctions.IA import AgruparSequancias
 
 # np.set_printoptions(threshold=np.inf)
    
   
-input_size = 50
+input_size = 5
 
-LancesBlaze = Lances.Get(200, ReturnType='cor')
+LancesBlaze = Lances.Get(600, ReturnType='cor')
 
 train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
 
+val_x = np.array(AgruparSequancias(val_x,5))
+
+print(LancesBlaze[:50])
+print(val_x[0])
+
+quit()
 
 train_x = np.array(EncapsularSequencias(train_x))
 val_x = np.array(EncapsularSequencias(val_x))
@@ -35,10 +42,13 @@ val_y = np.array(val_y)
 
 model = Sequential()
 
+print('\nval_size: ', len(val_x))
+print('\ntrain_size: ', len(train_x))
+
 
 model.add(BatchNormalization())
-model.add(LSTM(units=64))
-model.add(Dense(10,activation='tanh'))
+model.add(LSTM(units=16))
+model.add(Dense(5,activation='tanh'))
 model.add(Dense(2, activation='sigmoid'))
 
 # predict_input = Lances.Get(input_size,ReturnType='cor')
@@ -92,7 +102,6 @@ ComandosFinais()
 quit()
 
 #################################### A PARTIR DAQUI É TUDO TESTE, PODE IGNORAR ####################################
-# teste 2
 # learning_rates = [5, 2, 0.5, 0.01]
 # optimizers = [SGD(learning_rate=lr, momentum=0.9) for lr in learning_rates]
 

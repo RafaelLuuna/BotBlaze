@@ -33,6 +33,7 @@ def PlotarGraficos(history, modelName):
 def SepararTreinamento(input, input_size, input_type='cor', val_percent=0.2, return_lst=['train_x','train_y']):
     split_val = int(len(input) * val_percent)
     if split_val < input_size:
+        print("\n![AVISO]! A porcentagem de amostra para validação contém apenas 1 registro, por favor, defina o valor de 'val_percent' maior.\n")
         split_val = input_size +1
     input_val = input[:split_val]
     input = input[split_val:]
@@ -95,4 +96,21 @@ def EncapsularSequencias(input):
     for iLst, value in enumerate(input):
         output[iLst] = [[value[i]] for i in value]
     
+    return output
+
+def AgruparSequancias(input, group_size):
+    if group_size <= 0:
+        group_size = 1
+    output = []
+    group = []
+    index = 0
+    i = 0
+    while index < len(input):
+        group.append(input[index])
+        i += 1
+        index += 1
+        if i == group_size:
+            output.append(group)
+            group = []
+            i = 0
     return output
