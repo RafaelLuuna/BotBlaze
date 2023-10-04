@@ -87,15 +87,15 @@ def AgruparSequancias(input_x, input_y, group_size):
     group = []
     index = 0
     i = 0
-    while index < len(input_x)-1:
-        group.append(input_x[index])
+    while index < len(input_x)-group_size:
+        group.append(input_x[index + i])
         i += 1
-        index += 1
         if i == group_size:
             output_x.append(group)
-            output_y.append(input_y[index - 1])
+            output_y.append(input_y[index+ i - 1])
 
             group = []
             i = 0
+            index += 1
     return output_x, output_y
         

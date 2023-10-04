@@ -22,7 +22,7 @@ from BlazeFunctions.IA import AgruparSequancias
    
   
 input_size = 5
-group_size = 20
+group_size = 300
 
 LancesBlaze = Lances.Get(2000, ReturnType='cor')
 
@@ -63,12 +63,12 @@ Adagrad_optimizer = Adagrad(learning_rate=lr)
 
 model.compile(loss='mse', optimizer=SGD_optimizer, metrics=['accuracy'],run_eagerly=True)
 
-history = model.fit(train_x, train_y, epochs=1000,validation_data=(val_x,val_y))
+history = model.fit(train_x, train_y, epochs=40,validation_data=(val_x,val_y))
 
 
 
 
-PlotarGraficos(history, '- 20 lances')
+PlotarGraficos(history, '- 300 lances')
 
 def ComandosFinais():
   InserirComando = True
