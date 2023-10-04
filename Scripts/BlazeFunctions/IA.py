@@ -32,6 +32,8 @@ def PlotarGraficos(history, modelName):
 
 def SepararTreinamento(input, input_size, input_type='cor', val_percent=0.2, return_lst=['train_x','train_y']):
     split_val = int(len(input) * val_percent)
+    if split_val < input_size:
+        split_val = input_size +1
     input_val = input[:split_val]
     input = input[split_val:]
     if input_type == 'cor':
@@ -52,11 +54,6 @@ def SepararTreinamento(input, input_size, input_type='cor', val_percent=0.2, ret
                     # case 8 | 9 | 10 | 11 | 12 | 13 | 14:
                     case 2:
                         train_y.append([0,1])
-
-                    case 1:
-                        train_y.append(1)
-                    case _:
-                        train_y.append(0)
         
     val_y = []
     for i in val_x[1:]:

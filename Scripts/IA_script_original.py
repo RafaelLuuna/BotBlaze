@@ -22,9 +22,10 @@ from BlazeFunctions.IA import EncapsularSequencias
   
 input_size = 50
 
-LancesBlaze = Lances.Get(10000, ReturnType='cor')
+LancesBlaze = Lances.Get(200, ReturnType='cor')
 
 train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
+
 
 train_x = np.array(EncapsularSequencias(train_x))
 val_x = np.array(EncapsularSequencias(val_x))
@@ -33,6 +34,7 @@ train_y = np.array(train_y)
 val_y = np.array(val_y)
 
 model = Sequential()
+
 
 model.add(BatchNormalization())
 model.add(LSTM(units=64))
