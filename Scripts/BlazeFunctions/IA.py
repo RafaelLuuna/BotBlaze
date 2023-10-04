@@ -76,7 +76,6 @@ def EncapsularSequencias(input):
     output = input
     for iLst, value in enumerate(input):
         output[iLst] = [[value[i]] for i in value]
-    
     return output
 
 def AgruparSequancias(input_x, input_y, group_size):

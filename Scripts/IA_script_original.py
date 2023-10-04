@@ -21,7 +21,7 @@ from BlazeFunctions.IA import AgruparSequancias
 # np.set_printoptions(threshold=np.inf)
    
   
-input_size = 5
+input_size = 40
 group_size = 20
 
 LancesBlaze = Lances.Get(2000, ReturnType='cor')
@@ -29,13 +29,11 @@ LancesBlaze = Lances.Get(2000, ReturnType='cor')
 train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
 
 
-train_x, train_y = AgruparSequancias(train_x, train_y, group_size)
-val_x, val_y = AgruparSequancias(val_x, val_y, group_size)
+# train_x, train_y = AgruparSequancias(train_x, train_y, group_size)
+# val_x, val_y = AgruparSequancias(val_x, val_y, group_size)
 
-
-
-# train_x = np.array(EncapsularSequencias(train_x))
-# val_x = np.array(EncapsularSequencias(val_x))
+train_x = np.array(EncapsularSequencias(train_x))
+val_x = np.array(EncapsularSequencias(val_x))
 
 train_x = np.array(train_x)
 val_x = np.array(val_x)
@@ -50,8 +48,10 @@ print('\ntrain_size: ', len(train_x),'\n')
 
 
 model.add(BatchNormalization())
-model.add(LSTM(units=32))
-model.add(Dense(5,activation='tanh'))
+model.add(LSTM(units=64))
+model.add(BatchNormalization())
+model.add(Dense(10,activation='tanh'))
+model.add(BatchNormalization())
 model.add(Dense(2, activation='sigmoid'))
 
 # predict_input = Lances.Get(input_size,ReturnType='cor')
@@ -63,7 +63,7 @@ Adagrad_optimizer = Adagrad(learning_rate=lr)
 
 model.compile(loss='mse', optimizer=SGD_optimizer, metrics=['accuracy'],run_eagerly=True)
 
-history = model.fit(train_x, train_y, epochs=1000,validation_data=(val_x,val_y))
+history = model.fit(train_x, train_y, epochs=40,validation_data=(val_x,val_y))
 
 
 
