@@ -33,7 +33,7 @@ init()
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 TimeRecord = str(time.strftime("%Y%m%d%H%M%S",time.localtime(time.time())))
-sys.stderr = open(os.path.join(script_dir,'errorLog'+TimeRecord+'.log'), 'w')
+sys.stderr = open(os.path.join(script_dir,'/erros/errorLog'+TimeRecord+'.log'), 'w')
 
 Config_path = os.path.join(script_dir,'Config.txt')
 
@@ -116,22 +116,21 @@ def CarregarTendencias(_ValorInicial,_0_Num_1_Collor):
 
 #-----------------------------------------------[ PREPARAÇÃO DE AMBIENTE ]-----------------------------------------------#
 
-print('Carregando lances')
-LancesBlaze = requests.get('https://blaze-1.com/api/roulette_games/recent').json()
-LanceBlazeAtual = [[LancesBlaze[0]['roll']],[LancesBlaze[0]['color']],[LancesBlaze[0]['created_at']]]
+import BlazeFunctions.Lances as Lances
+
+LancesBlaze = Lances.Get(10)
+LanceBlazeAtual = LancesBlaze[0]
 UltimoLance = LanceBlazeAtual
 
-s = './chromedriver.exe'
-ChromeOptions = Options()
-ChromeOptions.binary_location = '.\chrome\win64-114.0.5735.90\chrome-win64\chrome.exe'
-chrome_service = Service(s)
-driver = webdriver.Chrome(service=chrome_service, options=ChromeOptions)
+from BlazeFunctions.chromeFunctions import driver_class
 
-def initialize_browser():
-    print('[Inicialndo chromedriver]')
-    driver.get('https://blaze-1.com/pt/games/double')
+driver = driver_class()
 
-initialize_browser()
+driver.initialize_browser()
+
+
+quit()
+
 if(Simulacao == False):
     if(input('Digite "ok" para continuar: ') == 'ok'):
         print('Iniciando apostas')
