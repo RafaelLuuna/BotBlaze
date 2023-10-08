@@ -29,8 +29,6 @@ def PlotarGraficos(history, modelName):
     plt.tight_layout()
     plt.show()
 
-
-
 def SepararTreinamento(input, input_size, input_type='cor', val_percent=0.2, return_lst=['train_x','train_y']):
     split_val = int(len(input) * val_percent)
     if split_val < input_size:
@@ -70,7 +68,6 @@ def SepararTreinamento(input, input_size, input_type='cor', val_percent=0.2, ret
 
 
     return tuple(output)
-
 
 def EncapsularSequencias(input):
     output = input

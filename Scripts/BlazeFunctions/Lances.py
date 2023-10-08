@@ -1,6 +1,8 @@
 import requests
 import numpy as np
 
+blaze_api_url = 'https://blaze-4.com/api/roulette_games/history'
+
 def ConverterCor(input, input_type='string', output_type='int'):
     strings = ['white', 'red', 'black']
     numbers = [0,1,2]
@@ -21,9 +23,10 @@ def ConverterCor(input, input_type='string', output_type='int'):
 
 
 def Get(NumLances, ReturnType='var', Values=['roll', 'color', 'created_at']):
+    global blaze_api_url
     UltimosLances = []
     if NumLances < 300:
-        result_json = (requests.get("https://blaze-1.com/api/roulette_games/history")).json()
+        result_json = (requests.get(blaze_api_url)).json()
         resultados = reversed(result_json['records'])
         for resultado in resultados:
             match ReturnType:
@@ -38,7 +41,7 @@ def Get(NumLances, ReturnType='var', Values=['roll', 'color', 'created_at']):
     else:
         total_pages = int(NumLances / 300) + 1
         for page in reversed(range(1, total_pages+1)):
-            result_json = (requests.get("https://blaze-1.com/api/roulette_games/history?page=" + str(page))).json()
+            result_json = (requests.get(blaze_api_url + '?page=' + str(page))).json()
             resultados = reversed(result_json['records'])
             print('page :',page)
             for resultado in resultados:
