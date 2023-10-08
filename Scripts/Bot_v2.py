@@ -33,7 +33,7 @@ init()
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 TimeRecord = str(time.strftime("%Y%m%d%H%M%S",time.localtime(time.time())))
-sys.stderr = open(os.path.join(script_dir,'/erros/errorLog'+TimeRecord+'.log'), 'w')
+sys.stderr = open(os.path.join(script_dir,'erros/errorLog'+TimeRecord+'.log'), 'w')
 
 Config_path = os.path.join(script_dir,'Config.txt')
 

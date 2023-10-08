@@ -8,8 +8,6 @@ from selenium.common.exceptions import NoSuchElementException
 
 class driver_class:
 
-    driver = ''
-
     def __init__(self):
         ChromeOptions = Options()
         chrome_service = Service()
@@ -19,3 +17,12 @@ class driver_class:
     def initialize_browser(self):
         print('[Inicialndo chromedriver]')
         self.driver.get('https://blaze-1.com/pt/games/double')
+    
+    def incluir_aposta(self, valor):
+        return 0
+    
+    def apostar(self, cor):
+        return 0
+    
+    def get_saldo(self):
+        return 0
