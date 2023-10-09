@@ -11,7 +11,7 @@ Este projeto é um desafio pessoal que tem como objetivo me proporcionar um prim
 
 ## Funcionamento geral do robô de apostas.
 > [!WARNING]
-> Este é um projeto ainda em desenvolvimento, os conteúdos abaixo serão atualizados conforme o projeto evoluir.</sup>
+> Este é um projeto ainda em desenvolvimento, os conteúdos abaixo serão atualizados conforme o projeto evoluir.
 
 Este robô é capaz de apostar automaticamente na plataforma da blaze (no jogo Double) seguindo uma rotina pré definida. Os parâmetros dessa rotina podem ser configurados pelo usuário através do arquivo "config.txt" na pasta de Scripts
 
@@ -25,20 +25,23 @@ No modo simulação, é necessário informar um saldo inicial, esse saldo será 
 Já na segunda opção, após abrir a janela do Chrome, o usuário deverá logar com sua conta no site da Blaze, após logado, basta digitar 'ok' no prompt e o robô começará a jogar.
 
 > [!NOTE]
-> O robô jogará automaticamente enquanto houver saldo disponível na conta do usuário, para impedir o robô de apostar, é preciso definir a variável pausa=s no arquivo de configuração.</sup>
+> O robô jogará automaticamente enquanto houver saldo disponível na conta do usuário, para impedir o robô de apostar, é preciso definir a variável pausa=s no arquivo de configuração.
 
-##Parâmetros de configuração do robô:
+## Parâmetros de configuração do robô:
 
-Objetivo_final=Define qual a meta principal do robô. Ao atingir esse valor, o robô para de apostar imediatamente.
-Const_meta= 
-leitura_Maxima_de_lances=5
-Limite_de_apostas=200
-Margem_de_apostas=15000
-Piso=0
-Protecao_na_cor=s
-Tipo_de_protecao=5
-TaxaCor=1
-Dobrar_meta=n
-Lances_dobrados=20
-Pausa=n
-ModelPath=C:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\IA\Models\model_dense_input5_output2.keras
+> [!IMPORTANT]
+> Para facilitar, os parâmetros do tipo boolean são configurados com 's' para True e 'n' para False.
+
+* Objetivo_final= [tipo: float] - Define qual a meta principal do robô. Ao atingir esse valor, o robô para de apostar imediatamente.
+* Const_meta= [tipo: float] - Define qual valor será usado para definir a nova meta á cada vitória.
+* leitura_Maxima_de_lances= [tipo: int] - Define quantos lances serão levados em conta ao fazer análises de padrão.
+* Limite_de_apostas= [tipo: int] - Define quantas vezes o robô irá apostar. Ao atingir esse limite, o robô para de apostar imediatamente.
+* Margem_de_apostas= [tipo: float] - Define o valor da carteira que pode ser usado para apostas.
+* Piso= [tipo: float] - Define qual o saldo mínimo permitido. Ao atingir esse valor, o robô para de apostar imediatamente.
+* Protecao_na_cor= [tipo: boolean] - Define s
+* Tipo_de_protecao=5
+* TaxaCor=1
+* Dobrar_meta=n
+* Lances_dobrados=20
+* Pausa=n
+* ModelPath=C:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\IA\Models\model_dense_input5_output2.keras
