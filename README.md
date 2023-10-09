@@ -29,8 +29,10 @@ Já na segunda opção, após abrir a janela do Chrome, o usuário deverá logar
 
 ## Parâmetros de configuração do robô:
 
-* Objetivo_final= [tipo: float] - Define qual a meta principal do robô. Ao atingir esse valor, o robô para de apostar imediatamente.
-* Const_meta= [tipo: float] - Define qual valor será usado para definir a nova meta á cada vitória.
+* Objetivo_final= [tipo: float]
+> Define qual a meta principal do robô. Ao atingir esse valor, o robô para de apostar imediatamente.
+* Const_meta= [tipo: float]
+* > Define qual valor será usado para definir a nova meta á cada vitória.
 * leitura_Maxima_de_lances= [tipo: int] - Define quantos lances serão levados em conta ao fazer análises de padrão.
 * Limite_de_apostas= [tipo: int] - Define quantas vezes o robô irá apostar. Ao atingir esse limite, o robô para de apostar imediatamente.
 * Margem_de_apostas= [tipo: float] - Define o valor da carteira que pode ser usado para apostas.
