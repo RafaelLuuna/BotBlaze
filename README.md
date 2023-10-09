@@ -10,7 +10,7 @@ Este projeto é um desafio pessoal que tem como objetivo me proporcionar um prim
 * Tratamento de listas (Principalmente para trabalhar com IA).
 
 ### Funcionamento geral do robô de apostas.
-**Atenção: este é um projeto ainda em desenvolvimento, os conteúdos abaixo serão atualizados conforme o projeto evoluir.**
+<sup>Atenção: este é um projeto ainda em desenvolvimento, os conteúdos abaixo serão atualizados conforme o projeto evoluir.</sup>
 
 Este robô é capaz de apostar automaticamente na plataforma da blaze (no jogo Double) seguindo uma rotina pré definida. Os parâmetros dessa rotina podem ser configurados pelo usuário através do arquivo "config.txt" na pasta de Scripts
 
@@ -23,4 +23,4 @@ No modo simulação, é necessário informar um saldo inicial, esse saldo será 
 
 Já na segunda opção, após abrir a janela do Chrome, o usuário deverá logar com sua conta no site da Blaze, após logado, basta digitar 'ok' no prompt e o robô começará a jogar.
 
-<sub>Nota: o robô jogará automaticamente enquanto houver saldo disponível na conta do usuário, para impedir o robô de apostar deve habilitar a variável 'pausa' no arquivo de configuração.</sub>
+<sup>Nota: o robô jogará automaticamente enquanto houver saldo disponível na conta do usuário, para impedir o robô de apostar deve habilitar a variável 'pausa' no arquivo de configuração.</sup>
