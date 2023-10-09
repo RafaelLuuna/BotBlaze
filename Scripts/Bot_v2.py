@@ -128,17 +128,10 @@ driver = driver_class()
 
 driver.initialize_browser()
 
-
-quit()
-
-if(Simulacao == False):
-    if(input('Digite "ok" para continuar: ') == 'ok'):
-        print('Iniciando apostas')
-
 def GetSaldo():
-    if (Simulacao == False):
-        div_element = driver.find_element(By.CLASS_NAME, 'currency')
-        return div_element.text[3:].replace(".","").replace(",",".")
+    global driver
+    if Simulacao == True:
+        return driver.get_saldo()
     else:
         return Saldo_Simulacao
 
@@ -179,71 +172,6 @@ TendenciasEncontradas = []
 ModelPath = ''
 
 #-----------------------------------------------[ FUNÇÕES ]-----------------------------------------------#
-
-def ConfigurarDiretoNoPrompt():
-    print()
-    # Objetivo_1 = int(input('Digite o objetivo 1: '))
-    # Objetivo_2 = int(input('Digite o objetivo 2: '))
-    # Objetivo_3 = int(input('Digite o objetivo 3: '))
-    # Objetivo_final= int(input('Digite o objetivo final: '))
-
-    # print('')
-
-    # ConstMeta_0 = int(input('No começo, a meta vai aumentar de: '))
-    # ConstMeta_1 = int(input('Depois do objetivo 1, a meta vai aumentar de: '))
-    # ConstMeta_2 = int(input('Depois do objetivo 2, a meta vai aumentar de: '))
-    # ConstMeta_3 = int(input('No ultimo objetivo, a meta vai aumentar de: '))
-
-    # print('')
-
-    # LeituraMáximaDeLances = int(input('Quantos lances o bot precisa analisar?: '))
-
-    # print('')
-
-    # Limite_Max_Apostas = int(input('Quantas vezes o bot vai apostar antes de parar?: '))
-
-    # print('')
-
-    # MargemAposta = int(input('Margem para apostas: '))
-
-    # print('')
-
-    # Comando = input('Deseja proteçao na cor? (s / n): ')
-    # if(Comando == 's'):
-    #     SalvarNaCor = True
-    #     print('------------- Opçoes de mecânica de proteção -------------')
-    #     print('1 - Apostar na cor mais frequente')
-    #     print('2 - Apostar na cor menos frequente')
-    #     print('3 - Apostar na mais frequente apeneas nas 5 primeiras rodadas, depois disso, apostar na menos frequente')
-    #     print('4 - Repetir a última cor')
-    #     print('')
-    #     OpcaoDeProtecao = int(input('Escolha uma opçao: '))
-    #     if not(OpcaoDeProtecao == 1 or OpcaoDeProtecao == 2 or OpcaoDeProtecao == 3 or OpcaoDeProtecao == 4):
-    #         print('[ --- Comando invalido --- ]')
-    #         time.sleep(2)
-    #         quit()
-    # elif(Comando == 'n'):
-    #     SalvarNaCor = False
-    # else:
-    #     print('[ --- Comando invalido --- ]')
-    #     time.sleep(2)
-    #     quit()
-
-    # print('')
-
-    # Comando = input('Deseja dobrar a meta nos primeiros lances? (s / n): ')
-    # if(Comando == 's'):
-    #     DobrarMeta = True
-    #     QntLancesParaDobrar = int(input('Digite a quantidade de lances que deseja dobrar : '))
-    # elif(Comando == 'n'):
-    #     DobrarMeta = False
-    # else:
-    #     print('[ --- Comando invalido --- ]')
-    #     time.sleep(2)
-    #     quit()
-
-    # print('')
-
 Cor = 0
 
 
@@ -319,27 +247,6 @@ def AtualizarVariaveis():
     except Exception as e:
         print(f"Erro ao atualizar variáveis: {e}")
 
-#test
-
-def CarregarLances_IA(NumLances, ReturnType):
-    UltimosLances = []
-    result_json = (requests.get("https://blaze-1.com/api/roulette_games/history")).json()
-    resultados = reversed(result_json['records'])
-    for resultado in resultados:
-        match ReturnType:
-            case 'cor':
-                match resultado['color']:
-                    case 'white':
-                        UltimosLances.append(0)
-                    case 'red':
-                        UltimosLances.append(1)
-                    case 'black':
-                        UltimosLances.append(2)
-            case 'numero':
-                UltimosLances.append(resultado['roll'])
-    UltimosLances = UltimosLances[len(UltimosLances)-NumLances:]
-    return UltimosLances
-
 
 def AtualizarLances():
     global LancesBlaze
@@ -407,46 +314,22 @@ def IncluirAposta(Valor,Cor):
     global TotalApostadoBranca
     global TotalApostadoVermelha
     global TotalApostadoPreta
+    global driver
 
     if (Simulacao == False):
-        try:
-            input_element = driver.find_element(By.CLASS_NAME, 'input-field')
-            if(Valor > 0):
-                input_element.send_keys(Valor)
-            else:
-                input_element.send_keys(1)
-        except:
-            print("####ERRO: Não foi possível incluír o valor da aposta")
+        driver.incluir_aposta(Valor)
+        driver.selecionar_cor(Cor)
     
 
     match Cor:
         case 0:
-            if (Simulacao == False):
-                try:
-                    click_button = driver.find_element(By.XPATH, '//*[@id="roulette-controller"]/div[1]/div[2]/div[2]/div/div[2]')
-                    click_button.click()
-                except NoSuchElementException:
-                    print("")
             TotalApostadoBranca = round(TotalApostadoBranca + Valor, 2)
         case 1:
-            if (Simulacao == False):
-                try:
-                    click_button = driver.find_element(By.XPATH, '//*[@id="roulette-controller"]/div[1]/div[2]/div[2]/div/div[1]')
-                    click_button.click()
-                except NoSuchElementException:
-                    print("")
             TotalApostadoVermelha = round(TotalApostadoVermelha + Valor, 2)
         case 2:
-            if (Simulacao == False):
-                try:
-                    click_button = driver.find_element(By.XPATH, '//*[@id="roulette-controller"]/div[1]/div[2]/div[2]/div/div[3]')
-                    click_button.click()
-                except NoSuchElementException:
-                    print("")
             TotalApostadoPreta = round(TotalApostadoPreta + Valor, 2)
     TotalApostado = round(TotalApostado + Valor, 2)
 
-    
 def Apostar(Cor):
     global LucroPerda
     global Carteira
@@ -454,14 +337,9 @@ def Apostar(Cor):
     global TotalApostadoBranca
     global TotalApostadoVermelha
     global TotalApostadoPreta
+    global driver
     if(Simulacao == False):
-        try:
-            wait = WebDriverWait(driver, 10)
-            click_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="roulette-controller"]/div[1]/div[3]/button')))
-            click_button.click()
-            Carteira = round(float(GetSaldo()))
-        except:
-            print("###ERRO: Não foi possível clicar no botão de aposta")
+        driver.apostar(Cor)
     else:
         match Cor:
             case 0:
@@ -471,8 +349,6 @@ def Apostar(Cor):
             case 2:
                 Carteira = round(Carteira - TotalApostadoPreta,2)
     
-
-
 def PagarPremio():
     global Carteira
     global TotalApostadoBranca
@@ -666,7 +542,7 @@ def PrintLog():
     print('Ultimo numero sorteado:', LanceBlazeAtual[0], ' | Cor mais comum:',Cor, ' | Sugestão IA: ', SugestaoIA['Output'], '(Taxa de acerto: ', round(AcertosIA / (AcertosIA+ErrosIA) * 100,2),'%)')
     print('Brancas nos ultimos 20 lances: ',CountBrancas,' | A ultima branca foi a ', colored(len(LancesDepoisDaBranca),'black','on_white'),'rodadas')
     print('__________________________________________________________________________')
-    input_layer = np.array(CarregarLances_IA(LeituraMáximaDeLances,'cor')).reshape(-1,LeituraMáximaDeLances)
+    input_layer = np.array(Lances.Get(LeituraMáximaDeLances,ReturnType='cor')).reshape(-1,LeituraMáximaDeLances)
     print('lances IA: ', )
 
 def PrintLances(lst):
@@ -691,7 +567,7 @@ def PredictIA():
     global model
     model = load_model(ModelPath)
     model.save('backup.keras')
-    input_layer = CarregarLances_IA(LeituraMáximaDeLances,'cor')
+    input_layer = Lances.Get(LeituraMáximaDeLances,ReturnType='cor')
     # input_size = 5
     # input_layer_final = []
     # for i in range(1,int(round(LeituraMáximaDeLances/input_size,0))+1):
@@ -701,13 +577,11 @@ def PredictIA():
     SugestaoIA['Output'] = model.predict(input_layer)
     SugestaoIA['cor'] = np.argmax(np.array(model.predict(input_layer)))+1
 
-#-----------------------------------------------[ ROTINA DO BOT ]-----------------------------------------------#
-
 def TreinarIA(NumLances):
     global model
     global ModelPath
     global LeituraMáximaDeLances
-    input_test = CarregarLances_IA(NumLances,'cor')
+    input_test = Lances.Get(NumLances,ReturnType='cor')
     LancesBlaze_treinamento = [input_test[i:i + LeituraMáximaDeLances] for i in range(0,len(input_test)-LeituraMáximaDeLances+1)]
     resultados_treinamento = []
     for i in LancesBlaze_treinamento[1:]:
@@ -736,6 +610,8 @@ if(OpcaoDeProtecao == 5):
     model = load_model(ModelPath)
     print('[modelo carregado]')
     model.save('backup.keras')
+
+#-----------------------------------------------[ ROTINA DO BOT ]-----------------------------------------------#
 
 print('[iniciando rotina]')
 

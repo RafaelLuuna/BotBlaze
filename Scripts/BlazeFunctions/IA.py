@@ -94,4 +94,4 @@ def AgruparSequancias(input_x, input_y, group_size):
             i = 0
             index += 1
     return output_x, output_y
-        
+

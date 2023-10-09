@@ -21,19 +21,19 @@ from BlazeFunctions.IA import AgruparSequancias
 # np.set_printoptions(threshold=np.inf)
    
   
-input_size = 40
-group_size = 20
+input_size = 5
 
-LancesBlaze = Lances.Get(2000, ReturnType='cor')
+LancesBlaze = Lances.Get(3000, ReturnType='cor')
 
 train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
 
 
+# group_size = 20
 # train_x, train_y = AgruparSequancias(train_x, train_y, group_size)
 # val_x, val_y = AgruparSequancias(val_x, val_y, group_size)
 
-train_x = np.array(EncapsularSequencias(train_x))
-val_x = np.array(EncapsularSequencias(val_x))
+# train_x = np.array(EncapsularSequencias(train_x))
+# val_x = np.array(EncapsularSequencias(val_x))
 
 train_x = np.array(train_x)
 val_x = np.array(val_x)
@@ -43,15 +43,17 @@ val_y = np.array(val_y)
 
 model = Sequential()
 
-print('\nval_size: ', len(val_x))
-print('\ntrain_size: ', len(train_x),'\n')
+#-------------MODELO LSTM
+# model.add(BatchNormalization())
+# model.add(LSTM(units=64))
+# model.add(BatchNormalization())
+# model.add(Dense(10,activation='tanh'))
+# model.add(BatchNormalization())
 
+#-------------MODELO SEQUENCIAL
+model.add(Dense(input_size, activation='tanh'))
+model.add(Dense(3, activation='tanh'))
 
-model.add(BatchNormalization())
-model.add(LSTM(units=64))
-model.add(BatchNormalization())
-model.add(Dense(10,activation='tanh'))
-model.add(BatchNormalization())
 model.add(Dense(2, activation='sigmoid'))
 
 # predict_input = Lances.Get(input_size,ReturnType='cor')
@@ -61,9 +63,9 @@ lr = 0.009
 SGD_optimizer = SGD(learning_rate=lr, momentum= 0.9)
 Adagrad_optimizer = Adagrad(learning_rate=lr)
 
-model.compile(loss='mse', optimizer=SGD_optimizer, metrics=['accuracy'],run_eagerly=True)
+model.compile(loss='mse', optimizer=Adagrad_optimizer, metrics=['accuracy'],run_eagerly=True)
 
-history = model.fit(train_x, train_y, epochs=40,validation_data=(val_x,val_y))
+history = model.fit(train_x, train_y, epochs=500,validation_data=(val_x,val_y))
 
 
 

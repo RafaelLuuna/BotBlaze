@@ -22,13 +22,46 @@ class driver_class:
 
     def initialize_browser(self):
         print('[Inicialndo chromedriver]')
-        self.driver.get('https://blaze-1.com/pt/games/double')
+        self.driver.get('https://blaze-4.com/pt/games/double')
     
-    def incluir_aposta(self, valor):
-        return 0
+    def incluir_aposta(self, Valor):
+        try:
+            input_element = self.driver.find_element(By.CLASS_NAME, 'input-field')
+            if(Valor > 0):
+                input_element.send_keys(Valor)
+            else:
+                input_element.send_keys(1)
+        except Exception as e:
+            print(f"Erro ao incluir aposta: {e}")
+
+    def selecionar_cor(self, Cor):
+        match Cor:
+            case 0:
+                CorPath = 2
+            case 1:
+                CorPath = 1
+            case 2:
+                CorPath = 3
+        Path = f'//*[@id="roulette-controller"]/div[1]/div[2]/div[2]/div/div[{CorPath}]'
+        try:
+            click_button = self.driver.find_element(By.XPATH, Path)
+            click_button.click()
+        except Exception as e:
+            print(f"Erro ao apostar: {e}")
     
     def apostar(self, cor):
-        return 0
+        try:
+            wait = WebDriverWait(self.driver, 10)
+            click_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="roulette-controller"]/div[1]/div[3]/button')))
+            click_button.click()
+        except Exception as e:
+            print(f"Erro ao apostar: {e}")
+
     
     def get_saldo(self):
-        return 0
+        try:
+            div_element = self.driver.find_element(By.CLASS_NAME, 'currency')
+            return div_element.text[3:].replace(".","").replace(",",".")
+        except Exception as e:
+            print(f"Erro ao ler saldo da plataforma: {e}")
+            return 0
