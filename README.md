@@ -29,9 +29,6 @@ Já na segunda opção, após abrir a janela do Chrome, o usuário deverá logar
 
 ## Parâmetros de configuração do robô:
 
-> [!IMPORTANT]
-> Para facilitar, os parâmetros do tipo boolean são configurados com 's' para True e 'n' para False.
-
 * Objetivo_final= [tipo: float] - Define qual a meta principal do robô. Ao atingir esse valor, o robô para de apostar imediatamente.
 * Const_meta= [tipo: float] - Define qual valor será usado para definir a nova meta á cada vitória.
 * leitura_Maxima_de_lances= [tipo: int] - Define quantos lances serão levados em conta ao fazer análises de padrão.
@@ -45,3 +42,6 @@ Já na segunda opção, após abrir a janela do Chrome, o usuário deverá logar
 * Lances_dobrados=20
 * Pausa=n
 * ModelPath=C:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\IA\Models\model_dense_input5_output2.keras
+
+> [!IMPORTANT]
+> Para facilitar, os parâmetros do tipo boolean são configurados com 's' para True e 'n' para False.
