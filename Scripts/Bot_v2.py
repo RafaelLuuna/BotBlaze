@@ -118,9 +118,10 @@ def CarregarTendencias(_ValorInicial,_0_Num_1_Collor):
 
 import BlazeFunctions.Lances as Lances
 
-LancesBlaze = Lances.Get(10)
+LancesBlaze = Lances.Get(1)
 LanceBlazeAtual = LancesBlaze[0]
 UltimoLance = LanceBlazeAtual
+
 
 from BlazeFunctions.chromeFunctions import driver_class
 
@@ -131,14 +132,13 @@ driver.initialize_browser()
 def GetSaldo():
     global driver
     if Simulacao == True:
-        return driver.get_saldo()
-    else:
         return Saldo_Simulacao
+    else:
+        return driver.get_saldo()
 
 #-----------------------------------------------[ VARIÁVEIS ]-----------------------------------------------#
 
-
-TempInicio = datetime.datetime(int(str(LanceBlazeAtual[2])[2:6]),int(str(LanceBlazeAtual[2])[7:9]),int(str(LanceBlazeAtual[2])[10:12]),int(str(LanceBlazeAtual[2])[13:15]),int(str(LanceBlazeAtual[2])[16:18]),int(str(LanceBlazeAtual[2])[19:21]))
+TempInicio = datetime.datetime(int(str(LanceBlazeAtual[2])[:4]),int(str(LanceBlazeAtual[2])[5:7]),int(str(LanceBlazeAtual[2])[8:10]),int(str(LanceBlazeAtual[2])[11:13]),int(str(LanceBlazeAtual[2])[14:16]),int(str(LanceBlazeAtual[2])[17:19]))
 SaldoInicial = round(float(GetSaldo()))
 Carteira = SaldoInicial
 CountBrancas = 0
@@ -615,7 +615,28 @@ if(OpcaoDeProtecao == 5):
 
 print('[iniciando rotina]')
 
-while (Carteira - ApostaAtual > 0):
+
+while Carteira > 0:
+    ValorAposta = {'white':0,
+                'red':0,
+                'black':0
+                }
+    AtualizarVariaveis()
+    AtualizarLances()
+    PagarPremio()
+
+
+    IncluirAposta(ValorAposta['white'],0)
+    Apostar(0)
+    IncluirAposta(ValorAposta['red'],1)
+    Apostar(1)
+    IncluirAposta(ValorAposta['black'],2)
+    Apostar(2)
+else:
+    print('[-----------------QUEBROU-----------------]')
+
+
+while (Carteira> 0):
     #-----------------------------------------------[ INICIALIZAÇÃO ]-----------------------------------------------#
     LancesBlaze = requests.get('https://blaze-1.com/api/roulette_games/recent').json()
     LanceBlazeAtual = [[LancesBlaze[0]['roll']],[LancesBlaze[0]['color']],[LancesBlaze[0]['created_at']]]

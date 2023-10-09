@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "c:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\Scripts\Bot_v2.py", line 142, in <module>
+    SaldoInicial = round(float(GetSaldo()))
+                               ^^^^^^^^^^
+  File "c:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\Scripts\Bot_v2.py", line 137, in GetSaldo
+    return Saldo_Simulacao
+           ^^^^^^^^^^^^^^^
+NameError: name 'Saldo_Simulacao' is not defined
