@@ -17,16 +17,6 @@ from keras.models import load_model
 from keras.layers import Dense
 from keras.optimizers import Adagrad
 
-
-
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException
-
 from termcolor import colored
 from colorama import init, Fore, Style
 init()
@@ -612,29 +602,6 @@ if(OpcaoDeProtecao == 5):
     model.save('backup.keras')
 
 #-----------------------------------------------[ ROTINA DO BOT ]-----------------------------------------------#
-
-print('[iniciando rotina]')
-
-
-while Carteira > 0:
-    ValorAposta = {'white':0,
-                'red':0,
-                'black':0
-                }
-    AtualizarVariaveis()
-    AtualizarLances()
-    PagarPremio()
-
-
-    IncluirAposta(ValorAposta['white'],0)
-    Apostar(0)
-    IncluirAposta(ValorAposta['red'],1)
-    Apostar(1)
-    IncluirAposta(ValorAposta['black'],2)
-    Apostar(2)
-else:
-    print('[-----------------QUEBROU-----------------]')
-
 
 while (Carteira> 0):
     #-----------------------------------------------[ INICIALIZAÇÃO ]-----------------------------------------------#
