@@ -5,7 +5,7 @@ Este projeto é um desafio pessoal que tem como objetivo criar um robô capaz de
 ## Principais aprendizados:
 * O que são ambientes virtuais e como trabalhar com eles;
 * Sintaxe da linguagem Python (esse foi meu primeiro conato com a linguagem);
-* A importância da organização no código (Criar funções especializadas facilitam a manutenção e leitura do código);
+* A importância da organização no código (Criar funções especializadas para facilitar a manutenção e leitura do código);
 * Conhecimento básico de IA (Funcionamento dos neurônios, funções de ativação, optimizadores, técnicas de treinamento, etc..);
 * Tratamento de listas (Principalmente para trabalhar com IA).
 
