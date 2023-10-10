@@ -70,3 +70,8 @@ ModelPath= [tipo: string]
 
 > [!IMPORTANT]
 > Os parâmetros do tipo boolean são configurados com 's' para True e 'n' para False.
+
+
+## Mais detalhes sobre o código
+
+O código funciona majoritariamente no script "Bot_V2.py", dentro desse script há diversas funções como 'incluiraposta', 'pagarpremio', 'getsaldo', etc.. todas elas são utilizadas dentro da rotina do robô para calcular o valor que será apostado, qual cor será apostado, e carregar informações sobre os lances anteriores para o robô tomar as decisões (muitas dessas funções serão colocadas em Scripts separados futuramente, isso vai facilitar a leitura e manutenção do código
