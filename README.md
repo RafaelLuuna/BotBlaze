@@ -30,20 +30,31 @@ Já na segunda opção, após abrir a janela do Chrome, o usuário deverá logar
 ## Parâmetros de configuração do robô:
 
 * Objetivo_final= [tipo: float]
-> Define qual a meta principal do robô. Ao atingir esse valor, o robô para de apostar imediatamente.
+> Meta principal do robô. Ao atingir esse valor, o robô para de apostar imediatamente.
 * Const_meta= [tipo: float]
-* > Define qual valor será usado para definir a nova meta á cada vitória.
-* leitura_Maxima_de_lances= [tipo: int] - Define quantos lances serão levados em conta ao fazer análises de padrão.
-* Limite_de_apostas= [tipo: int] - Define quantas vezes o robô irá apostar. Ao atingir esse limite, o robô para de apostar imediatamente.
-* Margem_de_apostas= [tipo: float] - Define o valor da carteira que pode ser usado para apostas.
-* Piso= [tipo: float] - Define qual o saldo mínimo permitido. Ao atingir esse valor, o robô para de apostar imediatamente.
-* Protecao_na_cor= [tipo: boolean] - Define s
-* Tipo_de_protecao=5
-* TaxaCor=1
-* Dobrar_meta=n
-* Lances_dobrados=20
-* Pausa=n
-* ModelPath=C:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\IA\Models\model_dense_input5_output2.keras
+> Valor que será usado para definir uma nova meta á cada vitória.
+* leitura_Maxima_de_lances= [tipo: int]
+> Quantidade de lances que serão levados em conta ao fazer análises de padrões (inclusive para IA).
+* Limite_de_apostas= [tipo: int]
+> Quantas vezes o robô irá apostar. Ao atingir esse limite, o robô para de apostar imediatamente.
+* Margem_de_apostas= [tipo: float]
+> Valor da carteira que pode ser usado para apostas.
+* Piso= [tipo: float]
+> Saldo mínimo permitido. Ao atingir esse valor, o robô para de apostar imediatamente.
+* Protecao_na_cor= [tipo: boolean]
+> Define se o robô deve ou não apostar na cor.
+* Tipo_de_protecao= [tipo: int]
+> Define a regra que será usada para decidir a cor.
+* TaxaCor= [tipo: float]
+> Margem extra que será apostada na cor. O valor final apostado na cor é definido por: valor_apostado_na_branca + (valor_apostado_na_branca * TaxaCor)
+* Dobrar_meta= [tipo: boolean]
+> Define se a Const_meta será dobrada nos primeiros lances.
+* Lances_dobrados= [tipo: int]
+> Número de lances que serão dobrados.
+* Pausa= [tipo: boolean]
+> Quando habilitada essa opção, o robô para de apostar imediatamente.
+* ModelPath= [tipo: string]
+> Define o caminho do arquivo modelo de IA que será usado.
 
 > [!IMPORTANT]
-> Para facilitar, os parâmetros do tipo boolean são configurados com 's' para True e 'n' para False.
+> Os parâmetros do tipo boolean são configurados com 's' para True e 'n' para False.
