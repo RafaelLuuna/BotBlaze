@@ -1,6 +1,6 @@
 # Projeto de automação de apostas (em progresso..)
 
-Este projeto é um desafio pessoal que tem como objetivo me proporcionar um primeiro contato com o VS Code, Python, ambientes virtuais e outros conceitos de programação que até então não conhecia. Todos as técnicas/tecnologias usadas nesse projeto foram aprendidas através de muita pesquisa, tentativas e erros.
+Este projeto é um desafio pessoal que tem como objetivo criar um robô capaz de jogar sozinho no jogo double da Blaze. Todos as técnicas/tecnologias usadas nesse projeto foram aprendidas através de muita pesquisa, tentativas e erros.
 
 ## Principais aprendizados:
 * O que são ambientes virtuais e como trabalhar com eles;
