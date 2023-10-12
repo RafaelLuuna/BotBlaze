@@ -1,11 +1,11 @@
 # Projeto de automação de apostas (em progresso..)
 
-Este projeto é um desafio pessoal que tem como objetivo me proporcionar um primeiro contato com o VS Code, Python, ambientes virtuais e outros conceitos de programação que até então não conhecia. Todos as técnicas/tecnologias usadas nesse projeto foram aprendidas através de muita pesquisa, tentativas e erros.
+Este projeto é um desafio pessoal que tem como objetivo criar um robô capaz de jogar sozinho no jogo double da Blaze. Todos as técnicas/tecnologias usadas nesse projeto foram aprendidas através de muita pesquisa, tentativas e erros.
 
 ## Principais aprendizados:
 * O que são ambientes virtuais e como trabalhar com eles;
-* Sintaxe da linguagem Python;
-* A importância da organização no código (Criar funções especializadas facilitam a manutenção e leitura do código);
+* Sintaxe da linguagem Python (esse foi meu primeiro conato com a linguagem);
+* A importância da organização no código (Criar funções especializadas para facilitar a manutenção e leitura do código);
 * Conhecimento básico de IA (Funcionamento dos neurônios, funções de ativação, optimizadores, técnicas de treinamento, etc..);
 * Tratamento de listas (Principalmente para trabalhar com IA).
 
@@ -70,3 +70,8 @@ ModelPath= [tipo: string]
 
 > [!IMPORTANT]
 > Os parâmetros do tipo boolean são configurados com 's' para True e 'n' para False.
+
+
+## Mais detalhes sobre o código
+
+O código funciona majoritariamente no script "Bot_V2.py", dentro desse script há diversas funções como 'incluiraposta', 'pagarpremio', 'getsaldo', etc.. todas elas são utilizadas dentro da rotina do robô para calcular o valor que será apostado, qual cor será apostado, e carregar informações sobre os lances anteriores para o robô tomar as decisões (muitas dessas funções serão colocadas em Scripts separados futuramente, isso vai facilitar a leitura e manutenção do código
