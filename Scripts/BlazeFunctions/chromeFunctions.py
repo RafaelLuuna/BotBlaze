@@ -65,3 +65,5 @@ class driver_class:
         except Exception as e:
             print(f"Erro ao ler saldo da plataforma: {e}")
             return 0
+
+
