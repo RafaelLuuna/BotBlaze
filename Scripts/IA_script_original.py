@@ -23,7 +23,7 @@ from BlazeFunctions.IA_Functions import AgruparSequancias
   
 input_size = 5
 
-LancesBlaze = Lances.Get(3000, ReturnType='cor')
+LancesBlaze = Lances.Get(1200, ReturnType='cor')
 
 train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
 

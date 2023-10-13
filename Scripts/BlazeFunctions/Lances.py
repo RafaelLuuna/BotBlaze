@@ -69,7 +69,6 @@ def ConverterCor(input, input_type='string', output_type='int'):
             
     return Color
 
-
 def PrintLances(num_lances):
         lst = Get(num_lances, ReturnType='var', Values=['roll', 'color'])
         for lance in lst:
@@ -86,7 +85,6 @@ def PrintLances(num_lances):
                     bg_txt = 'black'
             print(colored(f'[{lance[0]}]',cor_txt,f'on_{bg_txt}'), end='')
         print('')
-
 
 def LancesDepoisDaBranca():
     ListaDeLances = reversed(Get(200))

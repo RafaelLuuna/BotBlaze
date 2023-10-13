@@ -1,5 +1,9 @@
+import sys
+sys.path.append('C:/Users/rafael.luna/Desktop/docs pessoais/Projects/BotBlaze/BotBlaze/Scripts/BlazeFunctions/')
+
 import matplotlib.pyplot as plt
 import Lances as Lances
+
 
 def PlotarGraficos(history, modelName):
     losses = history.history['loss']

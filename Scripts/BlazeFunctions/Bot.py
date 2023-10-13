@@ -1,3 +1,5 @@
+import sys
+sys.path.append('C:/Users/rafael.luna/Desktop/docs pessoais/Projects/BotBlaze/BotBlaze/Scripts/BlazeFunctions/')
 
 from chromeFunctions import driver_class
 from collections import Counter
@@ -16,7 +18,6 @@ import Lances as Lances
 import IA_Functions
 
 
-
 class Carteira:
 
     arrCarteiras = []
@@ -29,7 +30,6 @@ class Carteira:
     
     def AddSaldo(self, Valor):
         self.Saldo += Valor
-
 
 class Bot:
 
@@ -120,8 +120,6 @@ class Bot:
 
         print('pagou:',ValorPremio)
 
-
-
     def CalcularAposta(self, Saldo, Meta, Muliplicador):
         ApostaAtual = round((Meta - Saldo)/Muliplicador+0.1,1)
         Carteira_temporaria = Saldo - (ApostaAtual)
@@ -133,7 +131,6 @@ class Bot:
         if ApostaAtual < 1:
             ApostaAtual = 1
         return ApostaAtual
-    
 
     def Apostar(self):
         if self.TotalApostadoBranca > 0:
@@ -154,7 +151,14 @@ class Bot:
                 self.driver.incluir_aposta(self.TotalApostadoPreta)
                 self.driver.selecionar_cor(2)
                 self.driver.apostar(2)
+
+    def TreinarIA(self):
+        LancesBlaze = Lances.Get(299, ReturnType='cor')
+        train_x, val_x, train_y, val_y = IA_Functions.SepararTreinamento(input=LancesBlaze,input_size=self.LeituraMáximaDeLances, return_lst=['train_x','val_x', 'train_y', 'val_y'])
         
+        Adagrad_optimizer = Adagrad(learning_rate=0.0004)
+        self.model.compile(loss='mse', optimizer=Adagrad_optimizer, metrics=['accuracy'])
+        self.model.fit(train_x, train_y, epochs=10,validation_data=(val_x,val_y))
 
     def IniciarRotina(self, modo='Live', lista_lances=[]):
         #Modo Live = ao vivo
@@ -164,7 +168,6 @@ class Bot:
         match modo:
             case 'Live':
                 UltimoLance = Lances.Get(1)[0]
-                self.driver.initialize_browser()
                 if self.Simulacao == False:
                     Holder = True
                     while Holder == True:
@@ -337,35 +340,34 @@ class Bot:
                     ContagemAposta = ContagemAposta + 1
 
                     if self.OpcaoDeProtecao == 5:
-                        LancesBlaze = Lances.Get(200, ReturnType='cor')
-                        train_x, val_x, train_y, val_y = IA_Functions.SepararTreinamento(input=LancesBlaze,input_size=self.LeituraMáximaDeLances, return_lst=['train_x','val_x', 'train_y', 'val_y'])
-                        
-                        Adagrad_optimizer = Adagrad(learning_rate=0.0004)
-                        self.model.compile(loss='mse', optimizer=Adagrad_optimizer, metrics=['accuracy'])
-                        self.model.fit(train_x, train_y, epochs=10,validation_data=(val_x,val_y))
+                        self.TreinarIA()
+
 
 
                 #-----------------------------------------------[ RESUMO E RELATÓRIO ]-----------------------------------------------#
+                if len(self.arrBots) == 1:
+                    NumTotalDeApostas = NumTotalDeApostas +1
+                    print(LanceBlazeAtual)
+                    data = LanceBlazeAtual[2][:10].split('-')
+                    hora = LanceBlazeAtual[2][11:19].split(':')
+                    data = [int(i) for i in data]
+                    hora = [int(i) for i in hora]
+                    TempFim = datetime.datetime(data[0],data[1],data[2],hora[0],hora[1],hora[2])
+                    DeltaTempo = TempFim - TempInicio
 
-                NumTotalDeApostas = NumTotalDeApostas +1
-                print(LanceBlazeAtual)
-                data = LanceBlazeAtual[2][:10].split('-')
-                hora = LanceBlazeAtual[2][11:19].split(':')
-                data = [int(i) for i in data]
-                hora = [int(i) for i in hora]
-                TempFim = datetime.datetime(data[0],data[1],data[2],hora[0],hora[1],hora[2])
-                DeltaTempo = TempFim - TempInicio
+                    #os.system('cls')
 
-                #os.system('cls')
-
-                self.PrintLog(LanceBlazeAtual,NumTotalDeApostas,DeltaTempo,ContagemAposta,MetaAtual,CorMaisComum,SugestaoIA, LucroPerdaRodada)
-                # if(AchouTendencia == True):
-                #     PrintLog()
-                #     PrintTendencias()
-                Lances.PrintLances(30)
-                #listaDados = [LanceBlazeAtual[0][0],LanceBlazeAtual[1][0],TempFim,Carteira,MetaAtual,TotalApostadoBranca,TotalApostadoVermelha,TotalApostadoPreta,SugestaoIA['Output']]
-                #ImprimirLanceCSV(listaDados)
-                self.PrintConfig(SaldoBase)
+                    self.PrintLog(LanceBlazeAtual,NumTotalDeApostas,DeltaTempo,ContagemAposta,MetaAtual,CorMaisComum,SugestaoIA, LucroPerdaRodada)
+                    # if(AchouTendencia == True):
+                    #     PrintLog()
+                    #     PrintTendencias()
+                    Lances.PrintLances(30)
+                    #listaDados = [LanceBlazeAtual[0][0],LanceBlazeAtual[1][0],TempFim,Carteira,MetaAtual,TotalApostadoBranca,TotalApostadoVermelha,TotalApostadoPreta,SugestaoIA['Output']]
+                    #ImprimirLanceCSV(listaDados)
+                    self.PrintConfig(SaldoBase)
+                else:
+                    os.system('cls')
+                    print([i.Saldo for i in self.Carteira.arrCarteiras])
                 
         else:
             print('[-----------------QUEBROU-----------------]')
@@ -445,3 +447,4 @@ class Bot:
 
 BotTeste = Bot('C:/Users/rafael.luna/Desktop/docs pessoais/Projects/BotBlaze/BotBlaze/Scripts/Config.txt', Saldo=1000)
 BotTeste.IniciarRotina()
+
