@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import BlazeFunctions.Lances as Lances
+import Lances as Lances
 
 def PlotarGraficos(history, modelName):
     losses = history.history['loss']
@@ -94,4 +94,5 @@ def AgruparSequancias(input_x, input_y, group_size):
             i = 0
             index += 1
     return output_x, output_y
+
 

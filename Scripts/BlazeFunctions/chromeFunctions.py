@@ -9,7 +9,7 @@ import os
 
 class driver_class:
 
-    def __init__(self):
+    def initialize_browser(self, url='https://blaze-4.com/pt/games/double'):
         script_dir = os.path.dirname(os.path.abspath(__file__))
         chromedriver_path = os.path.join(script_dir,'chrome/chromedriver/chromedriver.exe')
         chrome_path = os.path.join(script_dir,'chrome/win64-114.0.5735.90/chrome-win64/chrome.exe')
@@ -18,11 +18,8 @@ class driver_class:
         ChromeOptions.binary_location = chrome_path
         chrome_service = Service(chromedriver_path)
         self.driver = webdriver.Chrome(service=chrome_service, options=ChromeOptions)
-
-
-    def initialize_browser(self):
         print('[Inicialndo chromedriver]')
-        self.driver.get('https://blaze-4.com/pt/games/double')
+        self.driver.get(url)
     
     def incluir_aposta(self, Valor):
         try:

@@ -13,10 +13,10 @@ import matplotlib.pyplot as plt
 
 import BlazeFunctions.Lances as Lances
 
-from BlazeFunctions.IA import PlotarGraficos
-from BlazeFunctions.IA import SepararTreinamento
-from BlazeFunctions.IA import EncapsularSequencias
-from BlazeFunctions.IA import AgruparSequancias
+from BlazeFunctions.IA_Functions import PlotarGraficos
+from BlazeFunctions.IA_Functions import SepararTreinamento
+from BlazeFunctions.IA_Functions import EncapsularSequencias
+from BlazeFunctions.IA_Functions import AgruparSequancias
 
 # np.set_printoptions(threshold=np.inf)
    
