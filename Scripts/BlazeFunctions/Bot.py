@@ -5,6 +5,7 @@ from termcolor import colored
 from colorama import init, Fore, Style
 init()
 
+import keras
 from keras.models import load_model
 from keras.optimizers import Adagrad
 
@@ -28,9 +29,6 @@ class Carteira:
     
     def AddSaldo(self, Valor):
         self.Saldo += Valor
-
-    def SetSaldo(self, Valor):
-        self.Saldo = Valor
 
 
 class Bot:
@@ -108,11 +106,11 @@ class Bot:
         LanceBlazeAtual = Lances.Get(1)[0]
 
         ValorPremio = 0
-        if(LanceBlazeAtual[1] == [0]):
+        if(LanceBlazeAtual[1] == 'white'):
             ValorPremio = round(self.TotalApostadoBranca * 14, 2)
-        if(LanceBlazeAtual[1] == [1]):
+        if(LanceBlazeAtual[1] == 'red'):
             ValorPremio = round(self.TotalApostadoVermelha * 2, 2)
-        if(LanceBlazeAtual[1] == [2]):
+        if(LanceBlazeAtual[1] == 'black'):
             ValorPremio = round(self.TotalApostadoPreta * 2, 2)
         self.Carteira.AddSaldo(ValorPremio)
 
@@ -144,18 +142,19 @@ class Bot:
                 self.driver.incluir_aposta(self.TotalApostadoBranca)
                 self.driver.selecionar_cor(0)
                 self.driver.apostar(0)
-        if self.TotalApostadoVermelha > 1:
+        if self.TotalApostadoVermelha > 0:
             self.Carteira.AddSaldo(-self.TotalApostadoVermelha)
             if self.Simulacao == False:
                 self.driver.incluir_aposta(self.TotalApostadoVermelha)
                 self.driver.selecionar_cor(1)
                 self.driver.apostar(1)
-        if self.TotalApostadoPreta > 2:
+        if self.TotalApostadoPreta > 0:
             self.Carteira.AddSaldo(-self.TotalApostadoPreta)
             if self.Simulacao == False:
                 self.driver.incluir_aposta(self.TotalApostadoPreta)
                 self.driver.selecionar_cor(2)
                 self.driver.apostar(2)
+        
 
     def IniciarRotina(self, modo='Live', lista_lances=[]):
         #Modo Live = ao vivo
@@ -166,6 +165,12 @@ class Bot:
             case 'Live':
                 UltimoLance = Lances.Get(1)[0]
                 self.driver.initialize_browser()
+                if self.Simulacao == False:
+                    Holder = True
+                    while Holder == True:
+                        print(input('Faça login no site da blaze, depois, digite qualquer coisa no terminal para prosseguir: '))
+                        Holder = False
+
             case 'List':
                 pass
 
@@ -178,9 +183,13 @@ class Bot:
         self.TotalApostadoPreta = 0
         self.PicoMaximo = self.Carteira.Saldo
 
+        if (self.Simulacao == False):
+            self.Carteira.Saldo = round(float(self.driver.get_saldo()))
+
         SaldoBase = self.Carteira.Saldo
         MetaAtual = SaldoBase + self.ConstMeta
         ApostaAtual = self.CalcularAposta(Saldo=SaldoBase, Meta=MetaAtual, Muliplicador=14)
+        SaldoInicialRodada = self.Carteira.Saldo
 
         data = UltimoLance[2][:10].split('-')
         hora = UltimoLance[2][11:19].split(':')
@@ -191,14 +200,18 @@ class Bot:
 
         self.model = load_model(self.ModelPath.replace('\\','/'))
         SugestaoIA = self.model.predict([Lances.Get(self.LeituraMáximaDeLances,ReturnType='cor')])[0]
+        print('previsão da IA: ',Lances.ConverterCor(SugestaoIA,input_type='IA',output_type='string_ptbr'))
         AcertosIA_temp = 0
         ErrosIA_temp = 0
         self.AcertosIA = 0
         self.ErrosIA = 0
+        print(self.Carteira.Saldo)
         #-----------------------------------------------[ ROTINA DO BOT ]-----------------------------------------------#
         while (self.Carteira.Saldo> 0):
             self.AtualizarVariaveis()
             LanceBlazeAtual = Lances.Get(1)[0]
+            if (self.Simulacao == False):
+                self.Carteira.Saldo = round(float(self.driver.get_saldo()))
 
             if not(UltimoLance == LanceBlazeAtual):
                 UltimoLance = LanceBlazeAtual
@@ -212,10 +225,6 @@ class Bot:
                     AcertosIA_temp = 0
                 print('[Lances atualizados] Lance blaze atual: ',LanceBlazeAtual)
 
-                self.SaldoInicialRodada = self.Carteira.Saldo
-
-                if (self.Simulacao == False):
-                    self.Carteira.SetSaldo = round(float(self.driver.get_saldo()))
 
                 ContagemCores = Counter([item[1] for item in Lances.Get(self.LeituraMáximaDeLances)]).most_common()
                 CorMaisComum = ContagemCores
@@ -229,11 +238,13 @@ class Bot:
                 
                 if(self.Carteira.Saldo > self.PicoMaximo):
                     self.PicoMaximo = self.Carteira.Saldo
+                
+                print(f'SaldoInicial: {SaldoInicialRodada}, SaldoAtual: {self.Carteira.Saldo}')
 
-                self.LucroPerda = self.Carteira.SaldoInicial - self.Carteira.Saldo
-                self.LucroPerdaRodada = self.SaldoInicialRodada - self.Carteira.Saldo
+                self.LucroPerda = self.Carteira.Saldo - self.Carteira.SaldoInicial
+                LucroPerdaRodada = self.Carteira.Saldo - SaldoInicialRodada
 
-                if (self.LucroPerdaRodada >= 0):
+                if (LucroPerdaRodada >= 0):
                     ContagemAposta = 0
                     CountPerdas = 0
                     SaldoBase = self.Carteira.Saldo
@@ -267,13 +278,14 @@ class Bot:
                 self.TotalApostadoBranca = 0
                 self.TotalApostadoVermelha = 0
                 self.TotalApostadoPreta = 0
+                SaldoInicialRodada = self.Carteira.Saldo
 
 
                 if(self.DobrarMeta == True and ContagemAposta < self.QntLancesParaDobrar):
                     MetaAtual = SaldoBase + self.ConstMeta
 
                 #-----------------------------------------------[ REGRAS DE APOSTA ]-----------------------------------------------#
-
+            
                 ApostaAtual = self.CalcularAposta(Saldo=self.Carteira.Saldo, Meta=MetaAtual, Muliplicador=14)
 
                 if(ContagemAposta < self.Limite_Max_Apostas and self.Carteira.Saldo < self.Objetivo_final and self.Pausa == False):
@@ -297,13 +309,13 @@ class Bot:
                                 if CorNum == 0:
                                     CorNum = CorMaisComum
                             case 5:
-                                SugestaoIA = self.model.predict(Lances.Get(self.LeituraMáximaDeLances,ReturnType='cor'))[0]
+                                SugestaoIA = self.model.predict([Lances.Get(self.LeituraMáximaDeLances,ReturnType='cor')])[0]
                                 CorNum = Lances.ConverterCor(SugestaoIA,input_type='IA', output_type='int')
 
                         #DEFINE O VALOR QUE VAI SER APOSTADO
                         if(not(CorNum == 0) and ErrosIA_temp < 2):
                             if(self.ModoAtaque == True):
-                                ApostaCor = (MetaAtual - self.Carteira.Saldo)/2
+                                ApostaCor = self.ConstMeta
                                 self.TotalApostadoBranca = ApostaCor * self.TaxaBranca_ModoAtaque                                
                             else:
                                 if(ApostaAtual + (ApostaAtual*self.TaxaCor) < 5):
@@ -325,12 +337,12 @@ class Bot:
                     ContagemAposta = ContagemAposta + 1
 
                     if self.OpcaoDeProtecao == 5:
-                        LancesBlaze = Lances.Get(40, ReturnType='cor')
+                        LancesBlaze = Lances.Get(200, ReturnType='cor')
                         train_x, val_x, train_y, val_y = IA_Functions.SepararTreinamento(input=LancesBlaze,input_size=self.LeituraMáximaDeLances, return_lst=['train_x','val_x', 'train_y', 'val_y'])
                         
-                        AdagradOptmizer = Adagrad(learning_rate=0.01,run_eagerly=True)
-                        self.model.compile(loss='mse', optmizer=AdagradOptmizer, metric=['accuracy'])
-                        self.model.fit(train_x, train_y, epochs=30,validation_data=(val_x,val_y))
+                        Adagrad_optimizer = Adagrad(learning_rate=0.0004)
+                        self.model.compile(loss='mse', optimizer=Adagrad_optimizer, metrics=['accuracy'])
+                        self.model.fit(train_x, train_y, epochs=10,validation_data=(val_x,val_y))
 
 
                 #-----------------------------------------------[ RESUMO E RELATÓRIO ]-----------------------------------------------#
@@ -344,9 +356,9 @@ class Bot:
                 TempFim = datetime.datetime(data[0],data[1],data[2],hora[0],hora[1],hora[2])
                 DeltaTempo = TempFim - TempInicio
 
-                os.system('cls')
+                #os.system('cls')
 
-                self.PrintLog(LanceBlazeAtual,NumTotalDeApostas,DeltaTempo,ContagemAposta,MetaAtual,CorMaisComum,SugestaoIA)
+                self.PrintLog(LanceBlazeAtual,NumTotalDeApostas,DeltaTempo,ContagemAposta,MetaAtual,CorMaisComum,SugestaoIA, LucroPerdaRodada)
                 # if(AchouTendencia == True):
                 #     PrintLog()
                 #     PrintTendencias()
@@ -358,7 +370,7 @@ class Bot:
         else:
             print('[-----------------QUEBROU-----------------]')
 
-    def PrintLog(self,LanceBlazeAtual, NumTotalDeApostas, DeltaTempo, ContagemAposta, MetaAtual, CorMaisComum, SugestaoIA):
+    def PrintLog(self,LanceBlazeAtual, NumTotalDeApostas, DeltaTempo, ContagemAposta, MetaAtual, CorMaisComum, SugestaoIA, LucroPerdaRodada):
         CorSaldo = 'green'
         if(self.Carteira.Saldo < self.Carteira.SaldoInicial):
             CorSaldo = 'red'
@@ -368,11 +380,11 @@ class Bot:
         print('Saldo atual:', colored(self.Carteira.Saldo,CorSaldo))
         print('Valor apostado:', self.TotalApostado, colored('[Branca: ','black','on_white'),self.TotalApostadoBranca,colored(' | Vermelha: ','white','on_red'),self.TotalApostadoVermelha,colored(' | Preta: ','white','on_black'),self.TotalApostadoPreta,colored(']','white','on_black'))
         print('Meta atual:', colored(MetaAtual,'blue'),' | Piso: ', self.piso)
-        if(self.LucroPerdaRodada>0):
+        if(LucroPerdaRodada>0):
             Cor = 'green'
         else:
             Cor = 'red'
-        print('lucro / perda no último lance:', colored(round(self.LucroPerdaRodada,2),Cor))
+        print('lucro / perda no último lance:', colored(round(LucroPerdaRodada,2),Cor))
         match CorMaisComum:
             case 0:
                 Cor = 'white'

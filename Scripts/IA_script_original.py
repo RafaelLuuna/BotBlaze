@@ -52,7 +52,7 @@ model = Sequential()
 
 #-------------MODELO SEQUENCIAL
 model.add(Dense(input_size, activation='tanh'))
-model.add(Dense(3, activation='tanh'))
+model.add(Dense(5, activation='tanh'))
 
 model.add(Dense(2, activation='sigmoid'))
 
@@ -65,7 +65,7 @@ Adagrad_optimizer = Adagrad(learning_rate=lr)
 
 model.compile(loss='mse', optimizer=Adagrad_optimizer, metrics=['accuracy'],run_eagerly=True)
 
-history = model.fit(train_x, train_y, epochs=500,validation_data=(val_x,val_y))
+history = model.fit(train_x, train_y, epochs=50,validation_data=(val_x,val_y))
 
 
 
