@@ -66,7 +66,7 @@ while Bot.Carteira.Saldo > 0:
 Os parâmetros abaixo são os parâmetros que devem ser definidos no arquivo 'Config.txt'.
 
 Simulacao= [tipo: boolean]
-> Quando ativada, o robô não fará nenhuma ação dentro da plataforma da blaze, e os cálculos serão feitos com base na sua carteira simulada. Caso essa opção esteja desativada, o robô tentará buscar sempre o saldo disponível na sua conta da Blaze, caso não encontre será solicitado que faça o login para prosseguir com a rotina.
+> Quando ativada, o robô não fará nenhuma ação dentro da plataforma da blaze, e os cálculos serão feitos com base na sua carteira simulada. Caso essa opção esteja desativada, além de executar os comandos de aposta dentro da plataforma Blaze, o robô tentará buscar sempre o saldo disponível na sua conta, caso não encontre o campo de saldo será solicitado no prompt que faça o login para prosseguir com a rotina.
 
 Objetivo_final= [tipo: float]
 > Meta principal do robô. Ao atingir esse valor, o robô para de apostar imediatamente.
