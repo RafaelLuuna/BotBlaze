@@ -22,9 +22,9 @@ from BlazeFunctions.IA_Functions import AgruparSequancias
 # np.set_printoptions(threshold=np.inf)
    
   
-input_size = 5
+input_size = 6
 
-LancesBlaze = Lances.Get(1200, ReturnType='cor')
+LancesBlaze = Lances.Get(600, ReturnType='cor')
 
 train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
 
@@ -52,21 +52,29 @@ model = Sequential()
 # model.add(BatchNormalization())
 
 #-------------MODELO SEQUENCIAL
+model.add(BatchNormalization())
 model.add(Dense(input_size, activation='tanh'))
+model.add(BatchNormalization())
 model.add(Dense(5, activation='tanh'))
+model.add(BatchNormalization())
+model.add(Dense(5, activation='tanh'))
+model.add(BatchNormalization())
 
+
+
+#-------------OUTPUT
 model.add(Dense(2, activation='sigmoid'))
 
 # predict_input = Lances.Get(input_size,ReturnType='cor')
 
-lr = 0.009
+lr = 0.05
 
-SGD_optimizer = SGD(learning_rate=lr, momentum= 0.9)
+SGD_optimizer = SGD(learning_rate=lr, momentum= 0.7)
 Adagrad_optimizer = Adagrad(learning_rate=lr)
 
-model.compile(loss='mse', optimizer=Adagrad_optimizer, metrics=['accuracy'],run_eagerly=True)
+model.compile(loss='mse', optimizer=SGD_optimizer, metrics=['accuracy'],run_eagerly=True)
 
-history = model.fit(train_x, train_y, epochs=50,validation_data=(val_x,val_y))
+history = model.fit(train_x, train_y, epochs=60,validation_data=(val_x,val_y))
 
 
 

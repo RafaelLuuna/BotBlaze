@@ -27,7 +27,7 @@ from Scripts.BlazeFunctions.Bot import bot_class
 Bot = bot_class('./Config.txt')
 ```
 
-Agora a variável 'Bot' tem todas as funções e propriedades necessárias para rodar sua rotia, você pode usar o comando 'Bot.RunRotina()' para executar um ciclo da rotina que está pré-definida no código do bot.
+Agora a variável 'Bot' tem todas as funções e propriedades necessárias para rodar sua rotia, você pode usar o comando 'Bot.RunCycle()' para executar um ciclo da rotina que está pré-definida no código do bot.
 
 De modo geral, em um ciclo da rotina do bot ele executa as seguintes etapas nessa ordem:
 1. Prepara todas as variáveis internas, elas serão levadas em consideração na próxima vez que executar a rotina.
@@ -36,11 +36,11 @@ De modo geral, em um ciclo da rotina do bot ele executa as seguintes etapas ness
 4. Escolhe uma cor para apostar (de acordo com os parâmetros do arquivo 'Config.txt').
 5. Por fim, apostar nas cores escolhidas.
 
-O comando 'Bot.RunRotina()' executa essa rotina apenas uma vez, portanto, para que o bot aposte várias vezes em sequência, é preciso usar este comando em conjunto há um loop ou á alguma outra condição que faça ele apostar várias vezes, por exemplo:
+O comando 'Bot.RunCycle()' executa essa rotina apenas uma vez, portanto, para que o bot aposte várias vezes em sequência, é preciso usar este comando em conjunto há um loop ou á alguma outra condição que faça ele apostar várias vezes, por exemplo:
 
 ```python
 while Bot.Carteira.Saldo > 0:
-    Bot.RunRotina()
+    Bot.RunCycle()
 
 #Desse modo a rotina é sempre executada enquanto o saldo da carteira do bot for maior que 0
 ```
@@ -60,7 +60,7 @@ Bot = bot_class('./Config.txt', Saldo=1000)
 Bot.driver.initialize_browser()
 
 while Bot.Carteira.Saldo > 0:
-    Bot.RunRotina()
+    Bot.RunCycle()
 ```
 
 Todos os parâmetros que serão levados em consideração na decisão do valor e da cor que será apostada são definidos no arquivo './Config.txt' que voê passou ao atribuir a classe na variável Bot.

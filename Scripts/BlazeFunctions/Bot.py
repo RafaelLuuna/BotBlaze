@@ -42,10 +42,28 @@ class bot_class:
         self.name = name
         self.ConfigPath = ConfigPath
         self.Cycle = 0
+        self.varRotina = {
+            'NumTotalDeApostas':'null',
+            'DeltaTempo':'null',
+            'ContagemAposta':'null',
+            'MetaAtual':'null',
+            'LucroPerdaRodada':'null',
+            'CorMaisComum':'null',
+            'AcertosIA':'null',
+            'ErrosIA':'null',
+            'LanceBlazeAtual':Lances.Get(1)[0],
+            'SugestaoIA':'null',
+            'ApostaAtual':'null',
+            'ErrosIA_temp':'null',
+            'AcertosIA_temp':'null',
+            'CountPerdas':'null',
+            'TempInicio':'null',
+            'SaldoBase':'null'
+        }
         self.arrBots.append(self)
 
     def EsperarLance(self):
-        LanceBlazeAtual = self.varRotina[8]
+        LanceBlazeAtual = self.varRotina['LanceBlazeAtual']
         UltimoLance = LanceBlazeAtual
         while UltimoLance == LanceBlazeAtual:
             LanceBlazeAtual = Lances.Get(1)[0]
@@ -110,7 +128,7 @@ class bot_class:
             print(f"Erro ao atualizar variáveis: {e}")
 
     def PagarPremio(self):
-        LanceBlazeAtual = self.varRotina[8]
+        LanceBlazeAtual = self.varRotina['LanceBlazeAtual']
 
         print(f'Apostado: Branca={self.TotalApostadoBranca} , Vermelha={self.TotalApostadoVermelha} , Preta={self.TotalApostadoPreta}')
         print(f'Blaze sorteou: {LanceBlazeAtual[1]}')
@@ -128,6 +146,18 @@ class bot_class:
         self.TotalApostadoBranca = 0
         self.TotalApostadoVermelha = 0
         self.TotalApostadoPreta = 0
+
+        SaldoInicialRodada = self.varRotina['SaldoInicialRodada']
+
+        LucroPerdaRodada = self.Carteira.Saldo - SaldoInicialRodada
+        self.varRotina['LucroPerdaRodada'] = LucroPerdaRodada
+
+        if (LucroPerdaRodada > 0):
+            self.varRotina['ContagemAposta'] = 0
+            self.varRotina['CountPerdas'] = 0
+            self.varRotina['SaldoBase'] = self.Carteira.Saldo
+        else:
+            self.varRotina['CountPerdas'] += 1 
 
         print('Pagou:',ValorPremio)
 
@@ -163,15 +193,17 @@ class bot_class:
                 self.driver.selecionar_cor(2)
                 self.driver.apostar(2)
 
-    def TreinarIA(self):
-        LancesBlaze = Lances.Get(299, ReturnType='cor')
-        train_x, val_x, train_y, val_y = IA_Functions.SepararTreinamento(input=LancesBlaze,input_size=self.LeituraMáximaDeLances, return_lst=['train_x','val_x', 'train_y', 'val_y'])
+    def TreinarIA(self, num_lances=40, epochs=10, learning_rate=0.01):
+        LancesBlaze = Lances.Get(num_lances, ReturnType='cor')
+        train_x, train_y = IA_Functions.SepararTreinamento(input=LancesBlaze,input_size=self.LeituraMáximaDeLances, return_lst=['train_x', 'train_y'])
         
-        Adagrad_optimizer = Adagrad(learning_rate=0.0004)
+        Adagrad_optimizer = Adagrad(learning_rate=learning_rate)
         self.model.compile(loss='mse', optimizer=Adagrad_optimizer, metrics=['accuracy'])
-        self.model.fit(train_x, train_y, epochs=10,validation_data=(val_x,val_y))
+        self.model.fit(train_x, train_y, epochs=epochs)
 
-    def RunRotina(self):
+        self.model.save(self.ModelPath)
+
+    def RunCycle(self, LanceBlazeAtual=Lances.Get(1)[0]):
         #-----------------------------------------------[ INICIALIZAÇÃO ]-----------------------------------------------#
         self.GetConfig()
 
@@ -181,8 +213,8 @@ class bot_class:
                 print(input('Faça login no site da blaze, depois, pressione a tecla [enter] no terminal para prosseguir: '))
 
         if self.Cycle == 0:
-            LanceBlazeAtual=Lances.Get(1)[0]
-            self.varRotina = ['','','','','','','','',LanceBlazeAtual]
+            
+            self.varRotina['LanceBlazeAtual'] = LanceBlazeAtual
             
             data = LanceBlazeAtual[2][:10].split('-')
             hora = LanceBlazeAtual[2][11:19].split(':')
@@ -210,6 +242,7 @@ class bot_class:
             SaldoBase = self.Carteira.Saldo
             MetaAtual = SaldoBase + self.ConstMeta
             SaldoInicialRodada = self.Carteira.Saldo
+            LucroPerdaRodada = 0
 
 
             AcertosIA = 0
@@ -223,26 +256,26 @@ class bot_class:
             self.Cycle += 1
             print('[First cycle complete]')
         else:
-            NumTotalDeApostas = self.varRotina[0]
-            DeltaTempo = self.varRotina[1]
-            ContagemAposta = self.varRotina[2]
-            MetaAtual = self.varRotina[3]
-            LucroPerdaRodada = self.varRotina[4]
-            CorMaisComum = self.varRotina[5]
-            AcertosIA = self.varRotina[6]
-            ErrosIA = self.varRotina[7]
-            LanceBlazeAtual = self.varRotina[8]
-            SugestaoIA = self.varRotina[9]
-            ApostaAtual = self.varRotina[10]
-            ErrosIA_temp = self.varRotina[11]
-            AcertosIA_temp = self.varRotina[12]
-            CountPerdas = self.varRotina[13]
-            TempInicio = self.varRotina[14]
-            SaldoBase = self.varRotina[15]
+            NumTotalDeApostas = self.varRotina['NumTotalDeApostas']
+            DeltaTempo = self.varRotina['DeltaTempo']
+            ContagemAposta = self.varRotina['ContagemAposta']
+            MetaAtual = self.varRotina['MetaAtual']
+            LucroPerdaRodada = self.varRotina['LucroPerdaRodada']
+            CorMaisComum = self.varRotina['CorMaisComum']
+            AcertosIA = self.varRotina['AcertosIA']
+            ErrosIA = self.varRotina['ErrosIA']
+            LanceBlazeAtual = self.varRotina['LanceBlazeAtual']
+            SugestaoIA = self.varRotina['SugestaoIA']
+            ApostaAtual = self.varRotina['ApostaAtual']
+            ErrosIA_temp = self.varRotina['ErrosIA_temp']
+            AcertosIA_temp = self.varRotina['AcertosIA_temp']
+            CountPerdas = self.varRotina['CountPerdas']
+            TempInicio = self.varRotina['TempInicio']
+            SaldoBase = self.varRotina['SaldoBase']
 
-        self.EsperarLance()
-        LanceBlazeAtual=Lances.Get(1)[0]
-        self.varRotina[8] = LanceBlazeAtual
+
+        print(self.varRotina)
+        self.varRotina['LanceBlazeAtual'] = LanceBlazeAtual
         
         #-----------------------------------------------[ ROTINA DO BOT ]-----------------------------------------------#
         print(f'O saldo atual é: {self.Carteira.Saldo}')
@@ -266,8 +299,6 @@ class bot_class:
 
 
             SaldoInicialRodada = self.Carteira.Saldo
-            self.PagarPremio()
-
             
             if(self.Carteira.Saldo > self.PicoMaximo):
                 self.PicoMaximo = self.Carteira.Saldo
@@ -360,14 +391,6 @@ class bot_class:
             print(f'SaldoInicial: {SaldoInicialRodada}, SaldoAtual: {self.Carteira.Saldo}')
 
             self.LucroPerda = self.Carteira.Saldo - self.Carteira.SaldoInicial
-            LucroPerdaRodada = self.Carteira.Saldo - SaldoInicialRodada
-
-            if (LucroPerdaRodada > 0):
-                ContagemAposta = 0
-                CountPerdas = 0
-                SaldoBase = self.Carteira.Saldo
-            else:
-                CountPerdas += 1 
 
 
             #-----------------------------------------------[ RESUMO E RELATÓRIO ]-----------------------------------------------#
@@ -382,24 +405,25 @@ class bot_class:
                 TempFim = datetime.datetime(data[0],data[1],data[2],hora[0],hora[1],hora[2])
                 DeltaTempo = TempFim - TempInicio
 
-                self.varRotina = [
-                    NumTotalDeApostas,
-                    DeltaTempo,
-                    ContagemAposta,
-                    MetaAtual,
-                    LucroPerdaRodada,
-                    CorMaisComum,
-                    AcertosIA,
-                    ErrosIA,
-                    LanceBlazeAtual,
-                    SugestaoIA,
-                    ApostaAtual,
-                    ErrosIA_temp,
-                    AcertosIA_temp,
-                    CountPerdas,
-                    TempInicio,
-                    SaldoBase
-                ]
+                self.varRotina = {
+                    'NumTotalDeApostas':NumTotalDeApostas,
+                    'DeltaTempo':DeltaTempo,
+                    'ContagemAposta':ContagemAposta,
+                    'MetaAtual':MetaAtual,
+                    'LucroPerdaRodada':LucroPerdaRodada,
+                    'CorMaisComum':CorMaisComum,
+                    'AcertosIA':AcertosIA,
+                    'ErrosIA':ErrosIA,
+                    'LanceBlazeAtual':LanceBlazeAtual,
+                    'SugestaoIA':SugestaoIA,
+                    'ApostaAtual':ApostaAtual,
+                    'ErrosIA_temp':ErrosIA_temp,
+                    'AcertosIA_temp':AcertosIA_temp,
+                    'CountPerdas':CountPerdas,
+                    'TempInicio':TempInicio,
+                    'SaldoBase':SaldoBase,
+                    'SaldoInicialRodada':SaldoInicialRodada
+                }
 
             else:
                 os.system('cls')
@@ -408,16 +432,16 @@ class bot_class:
             print('[-----------------QUEBROU-----------------]')
 
     def PrintLog(self):
-        NumTotalDeApostas = self.varRotina[0]
-        DeltaTempo = self.varRotina[1]
-        ContagemAposta = self.varRotina[2]
-        MetaAtual = self.varRotina[3]
-        LucroPerdaRodada = self.varRotina[4]
-        CorMaisComum = self.varRotina[5]
-        AcertosIA = self.varRotina[6]
-        ErrosIA = self.varRotina[7]
-        LanceBlazeAtual = self.varRotina[8]
-        SugestaoIA = self.varRotina[9]
+        NumTotalDeApostas = self.varRotina['NumTotalDeApostas']
+        DeltaTempo = self.varRotina['DeltaTempo']
+        ContagemAposta = self.varRotina['ContagemAposta']
+        MetaAtual = self.varRotina['MetaAtual']
+        LucroPerdaRodada = self.varRotina['LucroPerdaRodada']
+        CorMaisComum = self.varRotina['CorMaisComum']
+        AcertosIA = self.varRotina['AcertosIA']
+        ErrosIA = self.varRotina['ErrosIA']
+        LanceBlazeAtual = self.varRotina['LanceBlazeAtual']
+        SugestaoIA = self.varRotina['SugestaoIA']
 
         CorSaldo = 'green'
         if(self.Carteira.Saldo < self.Carteira.SaldoInicial):
@@ -449,7 +473,7 @@ class bot_class:
         print('lances IA: ', Lances.Get(self.LeituraMáximaDeLances,Values=['roll']))
 
     def PrintConfig(self):
-        SaldoBase = self.varRotina[15]
+        SaldoBase = self.varRotina['SaldoBase']
 
         print('\n-----------------------------[CONFIGURAÇÕES DO BOT]-----------------------------')
 
