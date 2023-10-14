@@ -31,7 +31,7 @@ class Carteira:
     def AddSaldo(self, Valor):
         self.Saldo += Valor
 
-class Bot_class:
+class bot_class:
 
     arrBots = []
 

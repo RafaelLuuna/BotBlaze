@@ -1,11 +1,12 @@
 import os
 import Scripts.BlazeFunctions.Lances as Lances
-from Scripts.BlazeFunctions.Bot import Bot_class
+from Scripts.BlazeFunctions.Bot import bot_class
 
 
-Bot = Bot_class('./Config.txt', Saldo=1000)
+Bot = bot_class('./Config.txt', Saldo=1000)
 
 Bot.driver.initialize_browser()
+
 
 while Bot.Carteira.Saldo > 0:
     Bot.RunRotina()
