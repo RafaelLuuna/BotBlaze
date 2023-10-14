@@ -1,28 +1,34 @@
 # Projeto de automação de apostas (em progresso..)
 
-Este projeto é um desafio pessoal que tem como objetivo criar um robô capaz de jogar sozinho no jogo double da Blaze. Todos as técnicas/tecnologias usadas nesse projeto foram aprendidas através de muita pesquisa, tentativas e erros.
+Este projeto é um desafio pessoal que tem como objetivo criar um robô capaz de jogar sozinho no jogo double da Blaze. Todos as técnicas/tecnologias usadas nesse projeto foram aprendidas através de muita pesquisa, esforço e dedicação.
 
 ## Principais aprendizados:
 * O que são ambientes virtuais e como trabalhar com eles;
 * Sintaxe da linguagem Python (esse foi meu primeiro conato com a linguagem);
-* A importância da organização no código (Criar funções especializadas para facilitar a manutenção e leitura do código);
+* A importância da organização no código (Criar funções especializadas facilitam muito a manutenção e leitura do código);
 * Conhecimento básico de IA (Funcionamento dos neurônios, funções de ativação, optimizadores, técnicas de treinamento, etc..);
 * Tratamento de listas (Principalmente para trabalhar com IA).
 
 ## Funcionamento geral do robô de apostas.
 > [!WARNING]
-> Este é um projeto ainda em desenvolvimento, os conteúdos abaixo serão atualizados conforme o projeto evoluir.
+> Este é um projeto de estudo, não me responsabilizo por quaisquer prejuízos consequêntes do uso deste código. Use-o com sabedoria.
 
-Este robô é capaz de apostar automaticamente na plataforma da blaze (no jogo Double) seguindo uma rotina pré definida. Os parâmetros dessa rotina podem ser configurados pelo usuário através do arquivo "config.txt" na pasta de Scripts
+O robô é capaz de simular uma rodada ao vivo do jogo Double (https://blaze-4.com/pt/games/double) seguindo uma rotina pré-definida no script .\Scripts\BlazeFunctions\Bot.py. Dentro deste script há uma classe chamada 'bot_class', ela é a classe que contém todas as informações do robô, como o driver do chrome, Carteira, e outras informações relevantes para o seu funcionamento.
 
-O robô atualmente está funcionando através do script "Bot_V2.py" que está na pasta Scripts. Ao executar esse arquivo no terminal, será exibido um menu para o usuário selecionar qual modo de jogo deseja:
+Para usar o robô basta importar a classe 'bot_class' fornecendo um diretório de um arquivo de configuração e atribuí-la a uma variável que será seu bot, por exemplo:
 
-* 's' para simulação
-* 'j' para jogar com o saldo real da sua conta Blaze.
+```python
+from Scripts.BlazeFunctions.Bot import bot_class
 
-No modo simulação, é necessário informar um saldo inicial, esse saldo será usado como ponto de partida para o robô começar as apostas, a partir daí o jogo segue normalmente.
+Bot = bot_class('./Config.txt')
+```
 
-Já na segunda opção, após abrir a janela do Chrome, o usuário deverá logar com sua conta no site da Blaze, após logado, basta digitar 'ok' no prompt e o robô começará a jogar.
+Agora você pode usar o comando 'Bot.RunRotina()' para o bot executar um ciclo da sua rotina. De modo geral, a rotina do bot consiste em:
+- Preparar variáveis para registrar saldo, valor apostado, últimos lances, etc...
+- Aguardar o próximo lance ser sorteado pela Blaze (para evitar de começar a rotina em uma rodada que já começou).
+- Escolher uma cor para apostar (de acordo com os parâmetros do arquivo 'Config.txt').
+
+
 
 > [!NOTE]
 > O robô jogará automaticamente enquanto houver saldo disponível na conta do usuário, para impedir o robô de apostar, é preciso definir a variável pausa=s no arquivo de configuração.
@@ -70,8 +76,3 @@ ModelPath= [tipo: string]
 
 > [!IMPORTANT]
 > Os parâmetros do tipo boolean são configurados com 's' para True e 'n' para False.
-
-
-## Mais detalhes sobre o código
-
-O código funciona majoritariamente no script "Bot_V2.py", dentro desse script há diversas funções como 'incluiraposta', 'pagarpremio', 'getsaldo', etc.. todas elas são utilizadas dentro da rotina do robô para calcular o valor que será apostado, qual cor será apostado, e carregar informações sobre os lances anteriores para o robô tomar as decisões (muitas dessas funções serão colocadas em Scripts separados futuramente, isso vai facilitar a leitura e manutenção do código
