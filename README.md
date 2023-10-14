@@ -29,7 +29,7 @@ Agora você pode usar o comando 'Bot.RunRotina()' para executar um ciclo da roti
 
 De modo geral, em um ciclo da rotina do bot ele executa as seguintes etapas:
 1. Prepara as variáveis para registrar saldo, valor apostado, últimos lances, etc...
-2. Aguarda o próximo lance ser sorteado pela Blaze (para evitar de começar a rotina em uma rodada que já começou).
+2. Aguarda o próximo lance ser sorteado pela Blaze (para evitar de começar a rotina no meio de uma rodada que já está em andamento).
 3. Paga os prêmios da rodada de acordo com o total apostado na rodada anterior.
 4. Escolhe uma cor para apostar (de acordo com os parâmetros do arquivo 'Config.txt').
 5. Por fim, apostar nas cores escolhidas.
