@@ -27,10 +27,10 @@ from Scripts.BlazeFunctions.Bot import bot_class
 Bot = bot_class('./Config.txt')
 ```
 
-Agora você pode usar o comando 'Bot.RunRotina()' para executar um ciclo da rotina que está pré-definida no código do bot.
+Agora a variável 'Bot' tem todas as funções e propriedades necessárias para rodar sua rotia, você pode usar o comando 'Bot.RunRotina()' para executar um ciclo da rotina que está pré-definida no código do bot.
 
-De modo geral, em um ciclo da rotina do bot ele executa as seguintes etapas:
-1. Prepara as variáveis para registrar saldo, valor apostado, últimos lances, etc...
+De modo geral, em um ciclo da rotina do bot ele executa as seguintes etapas nessa ordem:
+1. Prepara todas as variáveis internas, elas serão levadas em consideração na próxima vez que executar a rotina.
 2. Aguarda o próximo lance ser sorteado pela Blaze (para evitar de começar a rotina no meio de uma rodada que já está em andamento).
 3. Paga os prêmios da rodada de acordo com o total apostado na rodada anterior.
 4. Escolhe uma cor para apostar (de acordo com os parâmetros do arquivo 'Config.txt').
@@ -39,9 +39,10 @@ De modo geral, em um ciclo da rotina do bot ele executa as seguintes etapas:
 O comando 'Bot.RunRotina()' executa essa rotina apenas uma vez, portanto, para que o bot aposte várias vezes em sequência, é preciso usar este comando em conjunto há um loop ou á alguma outra condição que faça ele apostar várias vezes, por exemplo:
 
 ```python
-#Desse modo a rotina é sempre executada enquanto o saldo da carteira do bot for maior que 0
 while Bot.Carteira.Saldo > 0:
     Bot.RunRotina()
+
+#Desse modo a rotina é sempre executada enquanto o saldo da carteira do bot for maior que 0
 ```
 Outro comando importante é o 'Bot.driver.initialize_browser()', ele abre uma janela do chromedriver já na página do double para você conseguir acompanhar os lances ao vivo. 
 
