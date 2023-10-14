@@ -31,7 +31,7 @@ class Carteira:
     def AddSaldo(self, Valor):
         self.Saldo += Valor
 
-class Bot:
+class Bot_class:
 
     arrBots = []
 
@@ -174,6 +174,12 @@ class Bot:
     def RunRotina(self):
         #-----------------------------------------------[ INICIALIZAÇÃO ]-----------------------------------------------#
         self.GetConfig()
+
+        #QUANDO NÃO DETECTAR O SALDO, PEDIRÁ PARA FAZER LOGIN
+        if self.Simulacao == False and self.driver.get_saldo() == 'Saldo não localizado':
+            while self.driver.get_saldo() == 'Saldo não localizado':
+                print(input('Faça login no site da blaze, depois, pressione a tecla [enter] no terminal para prosseguir: '))
+
         if self.Cycle == 0:
             LanceBlazeAtual=Lances.Get(1)[0]
             self.varRotina = ['','','','','','','','',LanceBlazeAtual]
@@ -237,12 +243,6 @@ class Bot:
         self.EsperarLance()
         LanceBlazeAtual=Lances.Get(1)[0]
         self.varRotina[8] = LanceBlazeAtual
-        #QUANDO NÃO DETECTAR O SALDO, PEDIRÁ PARA FAZER LOGIN
-        if self.Simulacao == False and self.driver.get_saldo() == 'Saldo não localizado':
-            Holder = True
-            while Holder == True:
-                print(input('Faça login no site da blaze, depois, pressione a tecla [enter] no terminal para prosseguir: '))
-                Holder = False
         
         #-----------------------------------------------[ ROTINA DO BOT ]-----------------------------------------------#
         print(f'O saldo atual é: {self.Carteira.Saldo}')
@@ -489,17 +489,3 @@ class Bot:
         print('Modelo IA: ', self.ModelPath)
 
         print('\n----------------------------------------------------------------------------------')
-
-
-BotTeste = Bot('C:/Users/rafael.luna/Desktop/docs pessoais/Projects/BotBlaze/BotBlaze/Scripts/Config.txt', Saldo=1000)
-
-BotTeste.driver.initialize_browser()
-
-while BotTeste.Carteira.Saldo > 0:
-    BotTeste.RunRotina()
-    if BotTeste.OpcaoDeProtecao == 5:
-        BotTeste.TreinarIA()
-    os.system('cls')
-    BotTeste.PrintLog()
-    Lances.PrintLances(30)
-    BotTeste.PrintConfig()
