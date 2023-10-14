@@ -15,9 +15,9 @@ Este projeto é um desafio pessoal que tem como objetivo criar um robô capaz de
 > [!WARNING]
 > Este é um projeto de estudo, não me responsabilizo por quaisquer prejuízos consequêntes do uso deste código. Use-o com sabedoria.
 
-O robô é capaz de simular uma rodada ao vivo do jogo Double (https://blaze-4.com/pt/games/double) seguindo uma rotina pré-definida no script .\Scripts\BlazeFunctions\Bot.py. Dentro deste script há uma classe chamada 'bot_class', ela é a classe que contém todas as informações do robô, como o driver do chrome, Carteira, e outras informações essenciais para o seu funcionamento.
+O robô é capaz de simular uma rodada ao vivo do jogo Double (https://blaze-4.com/pt/games/double) seguindo uma rotina pré-definida no script .\Scripts\BlazeFunctions\Bot.py. Dentro deste script há uma classe chamada 'bot_class', essa é a classe que contém todas as informações do robô e suas funções. Ela contém informações como carteira, lucro, número de apostas, funções de print de logs entre outras informações essenciais para o seu funcionamento.
 
-Para usar o robô basta importar a classe 'bot_class' fornecendo um diretório de um arquivo de configuração e atribuí-la a uma variável que será seu bot, por exemplo:
+Para usar o robô, basta importar a classe 'bot_class' fornecendo um diretório de um arquivo de configuração, depois, atribuir essa classe à uma variável que será seu bot, por exemplo:
 
 ```python
 from Scripts.BlazeFunctions.Bot import bot_class
@@ -25,14 +25,16 @@ from Scripts.BlazeFunctions.Bot import bot_class
 Bot = bot_class('./Config.txt')
 ```
 
-Agora você pode usar o comando 'Bot.RunRotina()' para o bot executar um ciclo da sua rotina. De modo geral, a rotina do bot consiste em:
-- Prepara as variáveis para registrar saldo, valor apostado, últimos lances, etc...
-- Aguarda o próximo lance ser sorteado pela Blaze (para evitar de começar a rotina em uma rodada que já começou).
-- Paga os prêmios da rodada de acordo com o total apostado na rodada anterior.
-- Escolhe uma cor para apostar (de acordo com os parâmetros do arquivo 'Config.txt').
-- Por fim, apostar nas cores escolhidas.
+Agora você pode usar o comando 'Bot.RunRotina()' para o bot executar um ciclo da rotina que está pré-definida no código.
 
-O comando 'Bot.RunRotina()' executa essa rotina apenas uma vez, para que o bot aposte várias vezes em sequência, é preciso usar este comando em conjunto há um loop ou á alguma outra condição que faça ele apostar mais vezes, por exemplo:
+De modo geral, em um ciclo da rotina do bot ele executa as seguintes etapas:
+1. Prepara as variáveis para registrar saldo, valor apostado, últimos lances, etc...
+2. Aguarda o próximo lance ser sorteado pela Blaze (para evitar de começar a rotina em uma rodada que já começou).
+3. Paga os prêmios da rodada de acordo com o total apostado na rodada anterior.
+4. Escolhe uma cor para apostar (de acordo com os parâmetros do arquivo 'Config.txt').
+5. Por fim, apostar nas cores escolhidas.
+
+O comando 'Bot.RunRotina()' executa essa rotina apenas uma vez, para que o bot aposte várias vezes em sequência, é preciso usar este comando em conjunto há um loop ou á alguma outra condição que faça ele apostar várias vezes, por exemplo:
 
 ```python
 #Desse modo a rotina é sempre executada enquanto o saldo da carteira do bot for maior que 0
@@ -42,6 +44,7 @@ while Bot.Carteira.Saldo > 0:
 
 
 ## Parâmetros de configuração do robô:
+Os parâmetros abaixo são os parâmetros que devem ser definidos no arquivo 'Config.txt'.
 
 Simulacao= [tipo: boolean]
 > Quando ativada, o robô não fará nenhuma ação dentro da plataforma da blaze, e os cálculos serão feitos com base na sua carteira simulada. Caso essa opção esteja desativada, o robô tentará buscar sempre o saldo disponível na sua conta da Blaze, caso não encontre será solicitado que faça o login para prosseguir com a rotina.
