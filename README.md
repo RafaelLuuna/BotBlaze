@@ -7,6 +7,7 @@ Este projeto é um desafio pessoal que tem como objetivo criar um robô capaz de
 * Sintaxe da linguagem Python (esse foi meu primeiro conato com a linguagem);
 * A importância da organização no código (Criar funções especializadas facilitam muito a manutenção e leitura do código);
 * Conhecimento básico de IA (Funcionamento dos neurônios, funções de ativação, optimizadores, técnicas de treinamento, etc..);
+* Trabalhar com as bibliotecas keras e numpy.
 * Tratamento de listas (Principalmente para trabalhar com IA).
 
 ## Funcionamento geral do robô de apostas.
