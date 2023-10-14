@@ -59,8 +59,8 @@ class driver_class:
         try:
             div_element = self.driver.find_element(By.CLASS_NAME, 'currency')
             return div_element.text[3:].replace(".","").replace(",",".")
+        except NoSuchElementException as e:
+            return 'Saldo não localizado'
         except Exception as e:
             print(f"Erro ao ler saldo da plataforma: {e}")
             return 0
-
-

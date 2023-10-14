@@ -91,7 +91,6 @@ def LancesDepoisDaBranca():
     UltimaBranca = 0
     for i, Value in enumerate(ListaDeLances):
         if Value[0] == 0:
-            print('Achou branca na posição ',i)
             UltimaBranca = i
             return UltimaBranca
 
