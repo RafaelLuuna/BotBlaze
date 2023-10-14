@@ -25,7 +25,7 @@ from Scripts.BlazeFunctions.Bot import bot_class
 Bot = bot_class('./Config.txt')
 ```
 
-Agora você pode usar o comando 'Bot.RunRotina()' para o bot executar um ciclo da rotina que está pré-definida no código.
+Agora você pode usar o comando 'Bot.RunRotina()' para executar um ciclo da rotina que está pré-definida no código do bot.
 
 De modo geral, em um ciclo da rotina do bot ele executa as seguintes etapas:
 1. Prepara as variáveis para registrar saldo, valor apostado, últimos lances, etc...
