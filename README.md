@@ -104,5 +104,5 @@ ModelPath= [tipo: string]
 > [!IMPORTANT]
 > Os parâmetros do tipo boolean são configurados com 's' para True e 'n' para False.
 
-> [!NOTE]
+> [!IMPORTANT]
 > O robô jogará automaticamente enquanto houver saldo disponível na conta do usuário, para impedir o robô de apostar, é preciso ativar a opção 'Pausa' no arquivo de configuração.
