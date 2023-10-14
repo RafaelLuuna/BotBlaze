@@ -43,7 +43,7 @@ O comando 'Bot.RunRotina()' executa essa rotina apenas uma vez, portanto, para q
 while Bot.Carteira.Saldo > 0:
     Bot.RunRotina()
 ```
-O comando 'Bot.driver.initialize_browser()' abre uma janela do chromedriver já na página do double para você conseguir acompanhar os lances ao vivo. 
+Outro comando importante é o 'Bot.driver.initialize_browser()', ele abre uma janela do chromedriver já na página do double para você conseguir acompanhar os lances ao vivo. 
 
 Caso eseja usando o robô com a opção de simulação desativada, é obrigatório o uso do comando 'Bot.driver.initialize_browser()' para que o robô consiga enxergar os campos dentro da página da blaze e realizar as apostas na sua conta.
 
