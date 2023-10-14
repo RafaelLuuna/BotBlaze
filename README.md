@@ -17,7 +17,7 @@ Este projeto é um desafio pessoal que tem como objetivo criar um robô capaz de
 
 O robô é capaz de simular uma rodada ao vivo do jogo Double (https://blaze-4.com/pt/games/double) seguindo uma rotina pré-definida no script .\Scripts\BlazeFunctions\Bot.py. Dentro deste script há uma classe chamada 'bot_class', essa é a classe que contém todas as informações do robô e suas funções. Ela contém informações como carteira, lucro, número de apostas, funções de print de logs entre outras informações essenciais para o seu funcionamento.
 
-Para usar o robô, basta importar a classe 'bot_class' fornecendo um diretório de um arquivo de configuração, depois, atribuir essa classe à uma variável que será seu bot, por exemplo:
+Para usar o robô, basta importar a classe 'bot_class' fornecendo um diretório de um arquivo de configuração e depois atribuir essa classe à uma variável que será seu bot, por exemplo:
 
 ```python
 from Scripts.BlazeFunctions.Bot import bot_class
