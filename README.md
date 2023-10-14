@@ -50,7 +50,7 @@ Caso eseja usando o robô com a opção de simulação desativada, é obrigatór
 
 
 
-Um exemplo de código simples para a aplicação desse bot na prática seria:
+Em resumo, o código de aplicação final desse bot na prática seria:
 
 ```python
 from Scripts.BlazeFunctions.Bot import bot_class
@@ -62,6 +62,9 @@ Bot.driver.initialize_browser()
 while Bot.Carteira.Saldo > 0:
     Bot.RunRotina()
 ```
+
+Todos os parâmetros que serão levados em consideração na decisão do valor e da cor que será apostada são definidos no arquivo './Config.txt' que voê passou ao atribuir a classe na variável Bot.
+
 
 ## Parâmetros de configuração do robô:
 Os parâmetros abaixo são os parâmetros que devem ser definidos no arquivo 'Config.txt'.
