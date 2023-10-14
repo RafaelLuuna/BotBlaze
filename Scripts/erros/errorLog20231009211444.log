@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "c:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\Scripts\Bot_v2.py", line 786, in <module>
-    driver.quit()
-    ^^^^^^^^^^^
-AttributeError: 'driver_class' object has no attribute 'quit'

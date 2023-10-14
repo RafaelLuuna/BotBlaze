@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "c:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\Scripts\Bot_v2.py", line 796, in <module>
-    print(' | Numero total de apostas:',NumTotalDeApostas,' | Tempo de jogo:', DeltaTempo,' | Saldo Inicial:',SaldoInicial,' | Saldo Final:',Carteira, " | Maior Saldo:", PicoMaximo)
-                                                                               ^^^^^^^^^^
-NameError: name 'DeltaTempo' is not defined
