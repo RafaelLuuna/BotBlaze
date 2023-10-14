@@ -41,7 +41,20 @@ O comando 'Bot.RunRotina()' executa essa rotina apenas uma vez, para que o bot a
 while Bot.Carteira.Saldo > 0:
     Bot.RunRotina()
 ```
+O comando 'Bot.driver.initialize_browser()' irá abrir a janela do chromedriver já na página do double para você conseguir acompanhar os lances ao vivo. Caso eseja usando o modo simulação, esse comando é opcional, porém caso o modo simulação estiver desabilitado você precisa obrigatóriamente iniciar o browser do driver.
 
+Um código simples da aplicação desse bot seria:
+
+```python
+from Scripts.BlazeFunctions.Bot import bot_class
+
+Bot = bot_class('./Config.txt', Saldo=1000)
+
+Bot.driver.initialize_browser()
+
+while Bot.Carteira.Saldo > 0:
+    Bot.RunRotina()
+```
 
 ## Parâmetros de configuração do robô:
 Os parâmetros abaixo são os parâmetros que devem ser definidos no arquivo 'Config.txt'.
