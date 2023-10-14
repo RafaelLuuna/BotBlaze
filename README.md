@@ -15,9 +15,11 @@ Este projeto é um desafio pessoal que tem como objetivo criar um robô capaz de
 > [!WARNING]
 > Este é um projeto de estudo, não me responsabilizo por quaisquer prejuízos consequêntes do uso deste código. Use-o com sabedoria.
 
-O robô é capaz de simular uma rodada ao vivo do jogo Double (https://blaze-4.com/pt/games/double) seguindo uma rotina pré-definida no script .\Scripts\BlazeFunctions\Bot.py. Dentro deste script há uma classe chamada 'bot_class', essa é a classe que contém todas as informações do robô e suas funções. Ela contém informações como carteira, lucro, número de apostas, funções de print de logs entre outras informações essenciais para o seu funcionamento.
+O robô é capaz de simular uma rodada ao vivo do jogo Double (https://blaze-4.com/pt/games/double) seguindo uma rotina que está pré-definida no script .\Scripts\BlazeFunctions\Bot.py. 
 
-Para usar o robô, basta importar a classe 'bot_class' fornecendo um diretório de um arquivo de configuração e depois atribuir essa classe à uma variável que será seu bot, por exemplo:
+Dentro deste script há uma classe chamada 'bot_class', esta classe contém todas as variáveis e funções que o robô precisa para funcionar corretamente.
+
+Para usar o robô, basta importar a classe 'bot_class' fornecendo um diretório de um arquivo de configuração e depois atribuir essa classe à uma variável que representará seu bot, por exemplo:
 
 ```python
 from Scripts.BlazeFunctions.Bot import bot_class
@@ -34,16 +36,20 @@ De modo geral, em um ciclo da rotina do bot ele executa as seguintes etapas:
 4. Escolhe uma cor para apostar (de acordo com os parâmetros do arquivo 'Config.txt').
 5. Por fim, apostar nas cores escolhidas.
 
-O comando 'Bot.RunRotina()' executa essa rotina apenas uma vez, para que o bot aposte várias vezes em sequência, é preciso usar este comando em conjunto há um loop ou á alguma outra condição que faça ele apostar várias vezes, por exemplo:
+O comando 'Bot.RunRotina()' executa essa rotina apenas uma vez, portanto, para que o bot aposte várias vezes em sequência, é preciso usar este comando em conjunto há um loop ou á alguma outra condição que faça ele apostar várias vezes, por exemplo:
 
 ```python
 #Desse modo a rotina é sempre executada enquanto o saldo da carteira do bot for maior que 0
 while Bot.Carteira.Saldo > 0:
     Bot.RunRotina()
 ```
-O comando 'Bot.driver.initialize_browser()' irá abrir a janela do chromedriver já na página do double para você conseguir acompanhar os lances ao vivo. Caso eseja usando o modo simulação, esse comando é opcional, porém caso o modo simulação estiver desabilitado você precisa obrigatóriamente iniciar o browser do driver.
+O comando 'Bot.driver.initialize_browser()' abre uma janela do chromedriver já na página do double para você conseguir acompanhar os lances ao vivo. 
 
-Um código simples da aplicação desse bot seria:
+Caso eseja usando o robô com a opção de simulação desativada, é obrigatório o uso do comando 'Bot.driver.initialize_browser()' para que o robô consiga enxergar os campos dentro da página da blaze e realizar as apostas na sua conta.
+
+
+
+Um exemplo de código simples para a aplicação desse bot na prática seria:
 
 ```python
 from Scripts.BlazeFunctions.Bot import bot_class
