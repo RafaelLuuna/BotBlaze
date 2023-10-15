@@ -1,11 +1,27 @@
 import os
+import sys
 import time
 import Scripts.BlazeFunctions.Lances as Lances
 from Scripts.BlazeFunctions.Bot import bot_class
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+sys.stderr = open(os.path.join(script_dir,'errorLog.log'), 'w')
+
+
 from termcolor import colored
 from colorama import init, Fore, Style
 init()
+
+def Write(FilePath, VarName, NewValue):
+    with open(FilePath, 'r') as arquivo:
+        Linhas = arquivo.readlines()
+        for i, linha in enumerate(Linhas):
+            chave, valor = linha.strip().split('=')
+            if chave == VarName:
+                Linhas[i] = VarName + '=' + NewValue + '\n'
+    with open(FilePath, 'w') as arquivo:
+        arquivo.writelines(Linhas)
+        arquivo.flush()
 
 def PrintCabecalho():
     os.system('cls')
@@ -15,20 +31,33 @@ def PrintCabecalho():
     print('')
     print('__________________________________________________________________')
 
-ConfigPath = './Config.txt'
-SaldoInicial = 1000
+ConfigFilePath = os.path.join(script_dir,'Paths.txt')
+
 Start = False
 while Start == False:
+
+    with open(ConfigFilePath, 'r') as arquivo:
+        Linhas = arquivo.readlines()
+        for linha in Linhas:
+            chave, valor = linha.strip().split('=')
+            match chave:
+                case 'ConfigPath':
+                    ConfigPath = valor
+                    
     with open(ConfigPath, 'r') as arquivo:
         Linhas = arquivo.readlines()
         for linha in Linhas:
             chave, valor = linha.strip().split('=')
-            if chave == 'Simulacao':
-                match valor:
-                    case 's':
-                        GameMode = 'Simulação'
-                    case 'n':
-                        GameMode = 'Modo real'
+            match chave:
+                case 'Simulacao':
+                    match valor:
+                        case 's':
+                            GameMode = 'Simulação'
+                        case 'n':
+                            GameMode = 'Modo real'
+                case 'SaldoInicial':
+                    SaldoInicial = float(valor)
+                
     PrintCabecalho()
     print('\n[Configuração atual do bot]\n')
     print(f'config_path: {ConfigPath}')
@@ -64,12 +93,17 @@ while Start == False:
                         if input_txt == '':
                             print('\n   Erro: o caminho do arquivo de configuração não pode ser vazio\n')
                         else:
-                            ConfigPath = input_txt
+                            try:
+                                test = open(input_txt, 'r')
+                                Write(ConfigFilePath, 'ConfigPath', input_txt)
+                            except Exception as e:
+                                print(f'\n   Erro ao abrir diretório: {e}\n')
+                                
                     Comando = 'pass'
                     inSetting = False
                 case 'alterar saldo':
                     if GameMode == 'Simulação':
-                        SaldoInicial = float(input('Digite o valor que deseja: '))
+                        Write(ConfigPath, 'SaldoInicial', input('Digite o valor que deseja: '))
                         Comando = 'pass'
                         inSetting = False
                 case 'return':
@@ -92,21 +126,13 @@ while Start == False:
                 opcao = input('Escolha uma opção: ')
                 match opcao:
                     case '1':
-                        newValue = 'Simulacao=s\n'
+                        newValue = 's'
                     case '2':
-                        newValue = 'Simulacao=n\n'
+                        newValue = 'n'
                     case _:
                         print('\n    Erro: opção inválida\n')
+            Write(ConfigPath, 'Simulacao', newValue)
 
-            with open(ConfigPath, 'r') as arquivo:
-                Linhas = arquivo.readlines()
-                for i, linha in enumerate(Linhas):
-                    chave, valor = linha.strip().split('=')
-                    if chave == 'Simulacao':
-                        Linhas[i] = newValue
-            with open(ConfigPath, 'w') as arquivo:
-                arquivo.writelines(Linhas)
-                arquivo.flush
         case 'quit':
             quit()
         case 'pass':
