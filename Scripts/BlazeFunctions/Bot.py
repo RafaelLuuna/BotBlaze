@@ -68,6 +68,14 @@ class bot_class:
         while UltimoLance == LanceBlazeAtual:
             LanceBlazeAtual = Lances.Get(1)[0]
 
+    def EsperarLogin(self):
+        #QUANDO NÃO DETECTAR O SALDO, PEDIRÁ PARA FAZER LOGIN
+        if self.driver.get_saldo() == 'Saldo não localizado':
+            print('[Saldo não detectado, aguardando login na plataforma]')
+            while self.driver.get_saldo() == 'Saldo não localizado':
+                pass
+        print('[Saldo localizado]')
+
     def GetConfig(self):
         try:
             with open(self.ConfigPath,'r') as arquivo:
@@ -208,11 +216,15 @@ class bot_class:
         self.GetConfig()
 
         #QUANDO NÃO DETECTAR O SALDO, PEDIRÁ PARA FAZER LOGIN
-        if self.Simulacao == False and self.driver.get_saldo() == 'Saldo não localizado':
-            while self.driver.get_saldo() == 'Saldo não localizado':
-                print(input('Faça login no site da blaze, depois, pressione a tecla [enter] no terminal para prosseguir: '))
+        if self.Simulacao == False:
+            if self.driver.get_saldo() == 'Saldo não localizado':
+                while self.driver.get_saldo() == 'Saldo não localizado':
+                    print(input('Faça login no site da blaze, depois, pressione a tecla [enter] no terminal para prosseguir: '))
+            self.Carteira.Saldo = round(float(self.driver.get_saldo()))
 
         if self.Cycle == 0:
+            if self.Simulacao == False:
+                self.Carteira.SaldoInicial = self.Carteira.Saldo
             
             self.varRotina['LanceBlazeAtual'] = LanceBlazeAtual
             
@@ -232,10 +244,6 @@ class bot_class:
             self.TotalApostadoVermelha = 0
             self.TotalApostadoPreta = 0
             self.PicoMaximo = self.Carteira.Saldo
-
-
-            if (self.Simulacao == False):
-                self.Carteira.Saldo = round(float(self.driver.get_saldo()))
 
 
 
@@ -274,7 +282,6 @@ class bot_class:
             SaldoBase = self.varRotina['SaldoBase']
 
 
-        print(self.varRotina)
         self.varRotina['LanceBlazeAtual'] = LanceBlazeAtual
         
         #-----------------------------------------------[ ROTINA DO BOT ]-----------------------------------------------#

@@ -1,4 +1,4 @@
-Simulacao=s
+Simulacao=n
 Objetivo_final=2000
 Const_meta=100
 leitura_Maxima_de_lances=6

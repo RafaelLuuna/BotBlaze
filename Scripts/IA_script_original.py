@@ -24,7 +24,7 @@ from BlazeFunctions.IA_Functions import AgruparSequancias
   
 input_size = 6
 
-LancesBlaze = Lances.Get(600, ReturnType='cor')
+LancesBlaze = Lances.Get(300, ReturnType='cor')
 
 train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
 
@@ -57,7 +57,7 @@ model.add(Dense(input_size, activation='tanh'))
 model.add(BatchNormalization())
 model.add(Dense(5, activation='tanh'))
 model.add(BatchNormalization())
-model.add(Dense(5, activation='tanh'))
+model.add(Dense(5, activation='relu'))
 model.add(BatchNormalization())
 
 
