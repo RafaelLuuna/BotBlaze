@@ -26,7 +26,7 @@ input_size = 6
 
 LancesBlaze = Lances.Get(300, ReturnType='cor')
 
-train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze,input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
+train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze, input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
 
 # -------------TREINAMENTO DO MODELO LSTM
 # group_size = 20
@@ -65,7 +65,6 @@ model.add(BatchNormalization())
 #-------------OUTPUT
 model.add(Dense(2, activation='sigmoid'))
 
-# predict_input = Lances.Get(input_size,ReturnType='cor')
 
 lr = 0.05
 
@@ -79,7 +78,7 @@ history = model.fit(train_x, train_y, epochs=60,validation_data=(val_x,val_y))
 
 
 
-PlotarGraficos(history, '- 20 lances')
+PlotarGraficos(history, '')
 
 def ComandosFinais():
   InserirComando = True
@@ -87,7 +86,7 @@ def ComandosFinais():
   
   while InserirComando == True:
 
-    User_input = input('Modelo treinado com sucesso, digite "s" para salvar, "c" para cancelar ou "t" para testar o modelo: ')
+    User_input = input('Modelo treinado com sucesso, digite "s" para salvar ou "c" para cancelar: ')
 
     match User_input:
       case 's':
@@ -97,18 +96,5 @@ def ComandosFinais():
         InserirComando = False
       case 'c':
         quit()
-      case 't':
-        input_layer = Lances.Get(30)
-        input_layer_1 = np.array(input_layer[0:5]).reshape(1,5)
-        input_layer_2 = np.array(input_layer[5:10]).reshape(1,5)
-        input_layer_3 = np.array(input_layer[10:15]).reshape(1,5)
-        input_layer_4 = np.array(input_layer[15:20]).reshape(1,5)
-        input_layer_5 = np.array(input_layer[20:25]).reshape(1,5)
-        input_layer_6 = np.array(input_layer[25:]).reshape(1,5)
-        input_layer = [input_layer_1,input_layer_2,input_layer_3,input_layer_4,input_layer_5,input_layer_6]
-        input_layer = [np.array(input) for input in input_layer]
-
-        print('Inout: ',input_layer)
-        print('Palpite IA: ',np.argmax(model.predict(input_layer)))
 
 ComandosFinais()
