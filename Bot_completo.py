@@ -102,6 +102,7 @@ while Start == False:
                                 Write(Paths, 'ConfigPath', input_txt)
                             except Exception as e:
                                 print(f'\n   Erro ao abrir diretório: {e}\n')
+                                time.sleep(1)
                                 
                     Comando = 'pass'
                     inSetting = False

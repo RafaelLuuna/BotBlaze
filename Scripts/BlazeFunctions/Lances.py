@@ -104,3 +104,4 @@ def CountLances(num_lances, colors=[0,1,2]):
     return contagem
 
 
+

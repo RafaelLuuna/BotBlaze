@@ -13,5 +13,7 @@ for i, lance in enumerate(LancesBlaze[:-1]):
     Bot.varRotina['LanceBlazeAtual'] = LancesBlaze[i + 1]
     Bot.PagarPremio()
 
+
+
 Bot.PrintLog()
 Bot.PrintConfig()
