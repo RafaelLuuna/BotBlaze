@@ -4,7 +4,7 @@ from Scripts.BlazeFunctions.Bot import bot_class
 
 Bot = bot_class('./Config.txt', Saldo=1000)
 
-LancesBlaze = Lances.Get(50)
+LancesBlaze = Lances.Get(10)
 
 for i, lance in enumerate(LancesBlaze[:-1]):
     Bot.RunCycle(lance)

@@ -1,5 +1,9 @@
+import os
 import sys
-sys.path.append('C:/Users/rafael.luna/Desktop/docs pessoais/Projects/BotBlaze/BotBlaze/Scripts/BlazeFunctions/')
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(script_dir)
+
 
 import matplotlib.pyplot as plt
 import Lances as Lances

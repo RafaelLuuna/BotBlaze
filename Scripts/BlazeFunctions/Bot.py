@@ -1,5 +1,8 @@
+import os
 import sys
-sys.path.append('C:/Users/rafael.luna/Desktop/docs pessoais/Projects/BotBlaze/BotBlaze/Scripts/BlazeFunctions/')
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(script_dir)
 
 from chromeFunctions import driver_class
 from collections import Counter
@@ -11,7 +14,7 @@ import keras
 from keras.models import load_model
 from keras.optimizers import Adagrad
 
-import os
+
 import time
 import datetime
 import Lances as Lances
@@ -491,7 +494,7 @@ class bot_class:
         
         print('\nConst. da meta atual: ', self.ConstMeta)
 
-        print('\nLeitra maxima de lances: ',self.LeituraMáximaDeLances)
+        print('\nLeitura maxima de lances: ',self.LeituraMáximaDeLances)
 
         print('\nLimite maximo de apostas:',self.Limite_Max_Apostas)
         print('Margem para apostas: ',self.MargemAposta)
