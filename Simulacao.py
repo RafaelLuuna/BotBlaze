@@ -10,8 +10,7 @@ for i, lance in enumerate(LancesBlaze[:-1]):
     Bot.RunCycle(lance)
     if Bot.Carteira.Saldo < 0:
         break
-    Bot.varRotina['LanceBlazeAtual'] = LancesBlaze[i + 1]
-    Bot.PagarPremio()
+    Bot.PagarPremio(LancesBlaze[i + 1])
 
 
 

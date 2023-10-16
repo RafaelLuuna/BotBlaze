@@ -9,14 +9,14 @@ Bot.EsperarLance()
 
 
 while Bot.Carteira.Saldo > 0:
+
     Bot.RunCycle()
     if Bot.Carteira.Saldo > 0:
         if Bot.OpcaoDeProtecao == 5:
-            Bot.TreinarIA()
+            Bot.TreinarIA(num_lances=40)
         Bot.PrintLog()
         Lances.PrintLances(30)
         Bot.PrintConfig()
 
         Bot.EsperarLance()
-        Bot.varRotina['LanceBlazeAtual'] = Lances.Get(1)[0]
-        Bot.PagarPremio()
+        Bot.PagarPremio(Lances.Get(1)[0])

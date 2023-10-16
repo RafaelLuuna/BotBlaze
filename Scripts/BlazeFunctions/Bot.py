@@ -39,34 +39,42 @@ class bot_class:
     arrBots = []
 
 
-    def __init__(self, ConfigPath, Saldo=0, name=f'Bot{len(arrBots)}'):
+    def __init__(self, Paths, Saldo=0, name=f'Bot{len(arrBots)}'):
         self.Carteira  = Carteira(Saldo, name)
         self.driver = driver_class()
         self.name = name
-        self.ConfigPath = ConfigPath
+        with open(Paths, 'r') as arquivo:
+            Linhas = arquivo.readlines()
+            for linha in Linhas:
+                chave, valor = linha.strip().split('=')
+                match chave:
+                    case 'ConfigPath':
+                        self.ConfigPath = valor
+                    case 'ModelPath':
+                        self.ModelPath = valor
         self.Cycle = 0
         self.varRotina = {
-            'NumTotalDeApostas':'null',
-            'DeltaTempo':'null',
-            'ContagemAposta':'null',
-            'MetaAtual':'null',
-            'LucroPerdaRodada':'null',
-            'CorMaisComum':'null',
-            'AcertosIA':'null',
-            'ErrosIA':'null',
+            'NumTotalDeApostas':0,
+            'DeltaTempo':0,
+            'ContagemAposta':0,
+            'MetaAtual':0,
+            'LucroPerdaRodada':0,
+            'CorMaisComum':0,
+            'AcertosIA':0,
+            'ErrosIA':0,
             'LanceBlazeAtual':Lances.Get(1)[0],
-            'SugestaoIA':'null',
-            'ApostaAtual':'null',
-            'ErrosIA_temp':'null',
-            'AcertosIA_temp':'null',
-            'CountPerdas':'null',
-            'TempInicio':'null',
-            'SaldoBase':'null'
+            'SugestaoIA':[0,0],
+            'ApostaAtual':0,
+            'ErrosIA_temp':0,
+            'AcertosIA_temp':0,
+            'CountPerdas':0,
+            'TempInicio':0,
+            'SaldoBase':0
         }
         self.arrBots.append(self)
 
     def EsperarLance(self):
-        LanceBlazeAtual = self.varRotina['LanceBlazeAtual']
+        LanceBlazeAtual = Lances.Get(1)[0]
         UltimoLance = LanceBlazeAtual
         while UltimoLance == LanceBlazeAtual:
             LanceBlazeAtual = Lances.Get(1)[0]
@@ -130,16 +138,14 @@ class bot_class:
                                 self.Pausa = True
                             elif(valor == 'n'):
                                 self.Pausa = False
-                        case 'ModelPath':
-                            self.ModelPath = valor
 
         except FileNotFoundError:
             print("Arquivo de configuração não encontrado.")
         except Exception as e:
             print(f"Erro ao atualizar variáveis: {e}")
 
-    def PagarPremio(self):
-        LanceBlazeAtual = self.varRotina['LanceBlazeAtual']
+    def PagarPremio(self, LanceBlazeAtual):
+        
 
         print(f'Apostado: Branca={self.TotalApostadoBranca} , Vermelha={self.TotalApostadoVermelha} , Preta={self.TotalApostadoPreta}')
         print(f'Blaze sorteou: {LanceBlazeAtual[1]}')
@@ -204,7 +210,7 @@ class bot_class:
                 self.driver.selecionar_cor(2)
                 self.driver.apostar(2)
 
-    def TreinarIA(self, num_lances=40, epochs=10, learning_rate=0.01):
+    def TreinarIA(self, num_lances, epochs=10, learning_rate=0.01):
         LancesBlaze = Lances.Get(num_lances, ReturnType='cor')
         train_x, train_y = IA_Functions.SepararTreinamento(input=LancesBlaze,input_size=self.LeituraMáximaDeLances, return_lst=['train_x', 'train_y'])
         

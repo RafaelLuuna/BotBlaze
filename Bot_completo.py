@@ -179,8 +179,7 @@ while Bot.Carteira.Saldo > 0:
         Bot.PrintConfig()
 
         Bot.EsperarLance()
-        Bot.varRotina['LanceBlazeAtual'] = Lances.Get(1)[0]
-        Bot.PagarPremio()
+        Bot.PagarPremio(Lances.Get(1)[0])
 
 sys.stderr.close()
 sys.stderr = sys.__stderr__

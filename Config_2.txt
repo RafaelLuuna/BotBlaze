@@ -11,5 +11,4 @@ TaxaCor=ATK-0.1
 Dobrar_meta=n
 Lances_dobrados=20
 Pausa=n
-ModelPath=C:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\IA\Models\model_dense_input5_output2.keras
 SaldoInicial=2000
