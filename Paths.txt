@@ -1,0 +1,1 @@
+ConfigPath=C:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\Config.txt

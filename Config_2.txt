@@ -1,0 +1,15 @@
+Simulacao=s
+Objetivo_final=5000
+Const_meta=200
+leitura_Maxima_de_lances=6
+Limite_de_apostas=20
+Margem_de_apostas=1000
+Piso=0
+Protecao_na_cor=s
+Tipo_de_protecao=5
+TaxaCor=ATK-0.1
+Dobrar_meta=n
+Lances_dobrados=20
+Pausa=n
+ModelPath=C:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\IA\Models\model_dense_input5_output2.keras
+SaldoInicial=2000
