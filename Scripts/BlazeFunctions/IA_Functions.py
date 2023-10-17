@@ -51,11 +51,11 @@ def SepararTreinamento(input, input_size, input_type='cor', val_percent=0.2, ret
 
     train_y = []
     for i in train_x[1:]:
-        train_y.append(Lances.ConverterCor(i[input_size-1],input_type='int',output_type='IA'))
+        train_y.append(Lances.Converter.Cor(i[input_size-1],input_type='int',output_type='IA'))
         
     val_y = []
     for i in val_x[1:]:
-        val_y.append(Lances.ConverterCor(i[input_size-1],input_type='int',output_type='IA'))
+        val_y.append(Lances.Converter.Cor(i[input_size-1],input_type='int',output_type='IA'))
 
 
 

@@ -4,6 +4,7 @@ import sys
 script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(script_dir)
 
+from icecream import ic
 from chromeFunctions import driver_class
 from collections import Counter
 from termcolor import colored
@@ -36,10 +37,9 @@ class Carteira:
 
 class bot_class:
 
-    arrBots = []
 
 
-    def __init__(self, Paths, Saldo=0, name=f'Bot{len(arrBots)}'):
+    def __init__(self, Paths, Saldo=0, name='Bot'):
         self.Carteira  = Carteira(Saldo, name)
         self.driver = driver_class()
         self.name = name
@@ -69,9 +69,9 @@ class bot_class:
             'AcertosIA_temp':0,
             'CountPerdas':0,
             'TempInicio':0,
-            'SaldoBase':0
+            'SaldoBase':0,
+            'SaldoInicialRodada':0
         }
-        self.arrBots.append(self)
 
     def EsperarLance(self):
         LanceBlazeAtual = Lances.Get(1)[0]
@@ -147,7 +147,7 @@ class bot_class:
     def PagarPremio(self, LanceBlazeAtual):
         
 
-        print(f'Apostado: Branca={self.TotalApostadoBranca} , Vermelha={self.TotalApostadoVermelha} , Preta={self.TotalApostadoPreta}')
+        print(f'\nApostado: Branca={self.TotalApostadoBranca} , Vermelha={self.TotalApostadoVermelha} , Preta={self.TotalApostadoPreta}')
         print(f'Blaze sorteou: {LanceBlazeAtual[1]}')
 
         ValorPremio = 0
@@ -175,6 +175,17 @@ class bot_class:
             self.varRotina['SaldoBase'] = self.Carteira.Saldo
         else:
             self.varRotina['CountPerdas'] += 1 
+        
+        SugestaoIA_txt = Lances.Converter.Cor(self.varRotina['SugestaoIA'],input_type='IA',output_type='string')
+
+        if SugestaoIA_txt == LanceBlazeAtual[1]:
+            self.varRotina['AcertosIA'] += 1
+            self.varRotina['AcertosIA_temp'] += 1
+            self.varRotina['ErrosIA_temp'] = 0
+        else:
+            self.varRotina['ErrosIA'] += 1
+            self.varRotina['ErrosIA_temp'] += 1
+            self.varRotina['AcertosIA_temp'] = 0
 
         print('Pagou:',ValorPremio)
 
@@ -220,9 +231,13 @@ class bot_class:
 
         self.model.save(self.ModelPath)
 
-    def RunCycle(self, LanceBlazeAtual=Lances.Get(1)[0]):
+    def RunCycle(self, LanceBlazeAtual=Lances.Get(1)[0], Condicoes=True):
+        print('----------------------------------------------------------------------------------')
         #-----------------------------------------------[ INICIALIZAÇÃO ]-----------------------------------------------#
         self.GetConfig()
+
+        self.varRotina['LanceBlazeAtual'] = LanceBlazeAtual
+        print('[Lances atualizados] Lance blaze atual: ',LanceBlazeAtual)
 
         #QUANDO NÃO DETECTAR O SALDO, PEDIRÁ PARA FAZER LOGIN
         if self.Simulacao == False:
@@ -268,7 +283,7 @@ class bot_class:
             ErrosIA_temp = 0
             self.model = load_model(self.ModelPath.replace('\\','/'))
             SugestaoIA = self.model.predict([Lances.Get(self.LeituraMáximaDeLances,ReturnType='cor')])[0]
-            print('previsão da IA: ',Lances.ConverterCor(SugestaoIA,input_type='IA',output_type='string_ptbr'))
+            print('previsão da IA: ',Lances.Converter.Cor(SugestaoIA,input_type='IA',output_type='string_ptbr'))
 
             self.Cycle += 1
             print('[First cycle complete]')
@@ -281,7 +296,6 @@ class bot_class:
             CorMaisComum = self.varRotina['CorMaisComum']
             AcertosIA = self.varRotina['AcertosIA']
             ErrosIA = self.varRotina['ErrosIA']
-            LanceBlazeAtual = self.varRotina['LanceBlazeAtual']
             SugestaoIA = self.varRotina['SugestaoIA']
             ApostaAtual = self.varRotina['ApostaAtual']
             ErrosIA_temp = self.varRotina['ErrosIA_temp']
@@ -289,22 +303,16 @@ class bot_class:
             CountPerdas = self.varRotina['CountPerdas']
             TempInicio = self.varRotina['TempInicio']
             SaldoBase = self.varRotina['SaldoBase']
+            SaldoInicialRodada = self.varRotina['SaldoInicialRodada']
 
-
-        self.varRotina['LanceBlazeAtual'] = LanceBlazeAtual
+        if self.OpcaoDeProtecao == 5:
+            SugestaoIA = self.model.predict([Lances.Get(self.LeituraMáximaDeLances,ReturnType='cor')])[0]
         
         #-----------------------------------------------[ ROTINA DO BOT ]-----------------------------------------------#
-        print(f'O saldo atual é: {self.Carteira.Saldo}')
+        print(f'\nSaldo antes de apostar: {self.Carteira.Saldo}')
         if self.Carteira.Saldo > 0:
-            SugestaoIA_txt = Lances.ConverterCor(SugestaoIA,input_type='IA',output_type='string')
 
-            if SugestaoIA_txt == LanceBlazeAtual[1]:
-                AcertosIA += 1
-                ErrosIA_temp = 0
-            else:
-                ErrosIA += 1
-                AcertosIA_temp = 0
-            print('[Lances atualizados] Lance blaze atual: ',LanceBlazeAtual)
+            
 
 
             ContagemCores = Counter([item[1] for item in Lances.Get(self.LeituraMáximaDeLances)]).most_common()
@@ -330,11 +338,7 @@ class bot_class:
                 if self.piso < 0:
                     self.piso = 0
             
-            
-            if (self.Carteira.Saldo - ApostaAtual < self.piso):
-                while self.Carteira.Saldo - ApostaAtual < self.piso:
-                    print(input('Piso atingido, digite qualquer coisa para continuar:'))
-                    self.piso = self.Carteira.Saldo - self.MargemAposta
+
 
             # AcharTendencia()
             # if(AchouTendencia == True):
@@ -356,8 +360,9 @@ class bot_class:
         
             ApostaAtual = self.CalcularAposta(Saldo=self.Carteira.Saldo, Meta=MetaAtual, Muliplicador=14)
 
-            if(ContagemAposta < self.Limite_Max_Apostas and self.Carteira.Saldo < self.Objetivo_final and self.Pausa == False):
 
+
+            if(ContagemAposta < self.Limite_Max_Apostas and self.Carteira.Saldo < self.Objetivo_final and self.Pausa == False and self.Carteira.Saldo - ApostaAtual > self.piso and Condicoes == True):
                 self.TotalApostadoBranca = ApostaAtual
                 if(self.SalvarNaCor == True):
                     #DEFINE A OPÇÃO SELECIONADA
@@ -373,12 +378,11 @@ class bot_class:
                             else:
                                 CorNum = CorMenosComum
                         case 4:
-                            CorNum = Lances.ConverterCor(LanceBlazeAtual[1])
+                            CorNum = Lances.Converter.Cor(LanceBlazeAtual[1])
                             if CorNum == 0:
                                 CorNum = CorMaisComum
                         case 5:
-                            SugestaoIA = self.model.predict([Lances.Get(self.LeituraMáximaDeLances,ReturnType='cor')])[0]
-                            CorNum = Lances.ConverterCor(SugestaoIA,input_type='IA', output_type='int')
+                            CorNum = Lances.Converter.Cor(SugestaoIA,input_type='IA', output_type='int')
 
                     #DEFINE O VALOR QUE VAI SER APOSTADO
                     if(not(CorNum == 0) and ErrosIA_temp < 2):
@@ -410,40 +414,35 @@ class bot_class:
 
 
             #-----------------------------------------------[ RESUMO E RELATÓRIO ]-----------------------------------------------#
-            if len(self.arrBots) == 1:
-                NumTotalDeApostas = NumTotalDeApostas +1
+            NumTotalDeApostas = NumTotalDeApostas +1
 
 
-                data = LanceBlazeAtual[2][:10].split('-')
-                hora = LanceBlazeAtual[2][11:19].split(':')
-                data = [int(i) for i in data]
-                hora = [int(i) for i in hora]
-                TempFim = datetime.datetime(data[0],data[1],data[2],hora[0],hora[1],hora[2])
-                DeltaTempo = TempFim - TempInicio
+            data = LanceBlazeAtual[2][:10].split('-')
+            hora = LanceBlazeAtual[2][11:19].split(':')
+            data = [int(i) for i in data]
+            hora = [int(i) for i in hora]
+            TempFim = datetime.datetime(data[0],data[1],data[2],hora[0],hora[1],hora[2])
+            DeltaTempo = TempFim - TempInicio
 
-                self.varRotina = {
-                    'NumTotalDeApostas':NumTotalDeApostas,
-                    'DeltaTempo':DeltaTempo,
-                    'ContagemAposta':ContagemAposta,
-                    'MetaAtual':MetaAtual,
-                    'LucroPerdaRodada':LucroPerdaRodada,
-                    'CorMaisComum':CorMaisComum,
-                    'AcertosIA':AcertosIA,
-                    'ErrosIA':ErrosIA,
-                    'LanceBlazeAtual':LanceBlazeAtual,
-                    'SugestaoIA':SugestaoIA,
-                    'ApostaAtual':ApostaAtual,
-                    'ErrosIA_temp':ErrosIA_temp,
-                    'AcertosIA_temp':AcertosIA_temp,
-                    'CountPerdas':CountPerdas,
-                    'TempInicio':TempInicio,
-                    'SaldoBase':SaldoBase,
-                    'SaldoInicialRodada':SaldoInicialRodada
-                }
-
-            else:
-                os.system('cls')
-                print([i.Saldo for i in self.Carteira.arrCarteiras])
+            self.varRotina = {
+                'NumTotalDeApostas':NumTotalDeApostas,
+                'DeltaTempo':DeltaTempo,
+                'ContagemAposta':ContagemAposta,
+                'MetaAtual':MetaAtual,
+                'LucroPerdaRodada':LucroPerdaRodada,
+                'CorMaisComum':CorMaisComum,
+                'AcertosIA':AcertosIA,
+                'ErrosIA':ErrosIA,
+                'LanceBlazeAtual':LanceBlazeAtual,
+                'SugestaoIA':SugestaoIA,
+                'ApostaAtual':ApostaAtual,
+                'ErrosIA_temp':ErrosIA_temp,
+                'AcertosIA_temp':AcertosIA_temp,
+                'CountPerdas':CountPerdas,
+                'TempInicio':TempInicio,
+                'SaldoBase':SaldoBase,
+                'SaldoInicialRodada':SaldoInicialRodada
+            }
         else:
             print('[-----------------QUEBROU-----------------]')
 
@@ -483,7 +482,7 @@ class bot_class:
         else:
             TaxaAcertoIA = f'{round(AcertosIA / (AcertosIA+ErrosIA) * 100,2)}%'
             
-        print('Ultimo numero sorteado:', LanceBlazeAtual[0], ' | Cor mais comum:',CorMaisComum, ' | Sugestão IA: ', Lances.ConverterCor(SugestaoIA, input_type='IA', output_type='string_ptbr'), '(Taxa de acerto: ',TaxaAcertoIA,')')
+        print('Ultimo numero sorteado:', LanceBlazeAtual[0], ' | Cor mais comum:',CorMaisComum, ' | Sugestão IA: ', Lances.Converter.Cor(SugestaoIA, input_type='IA', output_type='string_ptbr'), '(Taxa de acerto: ',TaxaAcertoIA,')')
         print('Brancas nos ultimos 20 lances: ',Lances.CountLances(20,[0]),' | A ultima branca foi a ', colored(Lances.LancesDepoisDaBranca(),'black','on_white'),'rodadas')
         print('__________________________________________________________________________')
         print('lances IA: ', Lances.Get(self.LeituraMáximaDeLances,Values=['roll']))

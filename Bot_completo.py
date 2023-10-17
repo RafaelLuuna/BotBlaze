@@ -156,7 +156,7 @@ while Start == False:
 
 match GameMode:
     case 'Modo real':
-        Bot = bot_class(ConfigPath=ConfigPath)
+        Bot = bot_class(Paths=Paths)
         Bot.driver.initialize_browser()
         Bot.EsperarLogin()
         Bot.EsperarLance()
@@ -164,7 +164,7 @@ match GameMode:
             print('\n    Erro: saldo zerado, por favor, entre em uma conta que possua algum saldo disponível para jogar')
             time.sleep(1)
     case "Simulação":
-        Bot = bot_class(ConfigPath=ConfigPath, Saldo=float(SaldoInicial))
+        Bot = bot_class(Paths=Paths, Saldo=float(SaldoInicial))
         Bot.driver.initialize_browser()
         Bot.EsperarLance()
 

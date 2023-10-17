@@ -1,18 +1,63 @@
 import os
+import random
 import Scripts.BlazeFunctions.Lances as Lances
 from Scripts.BlazeFunctions.Bot import bot_class
 
-Bot = bot_class('./Config.txt', Saldo=1000)
+from icecream import ic
 
-LancesBlaze = Lances.Get(10)
 
-for i, lance in enumerate(LancesBlaze[:-1]):
-    Bot.RunCycle(lance)
-    if Bot.Carteira.Saldo < 0:
-        break
-    Bot.PagarPremio(LancesBlaze[i + 1])
+gen = 0
+
+resultados = []
 
 
 
-Bot.PrintLog()
-Bot.PrintConfig()
+for gen in range(0,50):
+
+    Bot = ''
+
+    Bot = bot_class('./Paths.txt', Saldo=1000, name=f'bot{gen}')
+
+    leituraMaxima = 20
+
+    LancesBlaze_dict = Lances.Get(100 + int(random.random()*50), ReturnType='dict')
+    LancesBlaze = [[],[],[]]
+    for lance in LancesBlaze_dict:
+        LancesBlaze[0].append(Lances.Converter.DictToList(lance))
+        LancesBlaze[1].append(Lances.Converter.Cor(Lances.Converter.DictToList(lance,Values=['color'])[0]))
+        LancesBlaze[2].append(Lances.Converter.DictToList(lance, Values=['roll', 'color']))
+
+
+
+    for i, lance in enumerate(LancesBlaze[0][:-1]):
+        min_i = i-leituraMaxima
+        if min_i < 0:
+            min_i = 0
+
+        print(f'\n[GERAÇÃO: {gen}]')
+        Bot.RunCycle(LanceBlazeAtual=lance, Condicoes=(Bot.varRotina['ErrosIA_temp'] <= 1))
+
+        print('\n')
+        print(f'Sugestão da IA foi: {Lances.Converter.Cor(Bot.varRotina["SugestaoIA"], input_type="IA", output_type="string_ptbr")}')
+        print(f'A IA errou {Bot.varRotina["ErrosIA_temp"]} vezes consecutivas')
+
+        if Bot.Carteira.Saldo - Bot.varRotina['ApostaAtual']< 0:
+            break
+        Bot.PagarPremio(LancesBlaze[0][i + 1])
+
+        if Bot.Carteira.Saldo - Bot.varRotina['ApostaAtual'] <=Bot.piso:
+            break
+        
+        h = '\n\n\n-------------------------[Saldo do bot atual]-------------------------'
+        ic(h)
+        ic(Bot.Carteira.Saldo, Bot.varRotina['LucroPerdaRodada'])
+
+        h = '\n-------------------------[Registros]-------------------------'
+        ic(h)
+        ic(resultados)
+    
+
+    resultados.append({'name':Bot.name, 'PicoMaximo':Bot.PicoMaximo, 'NumLances':Bot.varRotina['NumTotalDeApostas'], 'SaldoFinal':Bot.Carteira.Saldo})
+
+
+ic(resultados)

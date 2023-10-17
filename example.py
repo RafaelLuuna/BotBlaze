@@ -3,7 +3,7 @@ import time
 import Scripts.BlazeFunctions.Lances as Lances
 from Scripts.BlazeFunctions.Bot import bot_class
 
-Bot = bot_class(ConfigPath='./Config.txt', Saldo=1000)
+Bot = bot_class(ConfigPath='./Paths.txt', Saldo=1000)
 Bot.driver.initialize_browser()
 Bot.EsperarLance()
 
