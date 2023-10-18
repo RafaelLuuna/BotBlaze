@@ -22,7 +22,7 @@ from BlazeFunctions.IA_Functions import AgruparSequancias
 # np.set_printoptions(threshold=np.inf)
    
   
-input_size = 6
+input_size = 5
 
 LancesBlaze = Lances.Get(300, ReturnType='cor')
 
@@ -66,7 +66,7 @@ model.add(BatchNormalization())
 model.add(Dense(2, activation='sigmoid'))
 
 
-lr = 0.05
+lr = 0.03
 
 SGD_optimizer = SGD(learning_rate=lr, momentum= 0.7)
 Adagrad_optimizer = Adagrad(learning_rate=lr)

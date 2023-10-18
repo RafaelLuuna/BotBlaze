@@ -12,15 +12,17 @@ resultados = []
 
 
 
-for gen in range(0,50):
+for gen in range(0,100):
 
     Bot = ''
 
-    Bot = bot_class('./Paths.txt', Saldo=1000, name=f'bot{gen}')
+    Bot = bot_class('./Paths.txt', name=f'bot{gen}')
 
     leituraMaxima = 20
 
-    LancesBlaze_dict = Lances.Get(100 + int(random.random()*50), ReturnType='dict')
+    NumeroDeLances = 30 + int(random.random()*50)
+
+    LancesBlaze_dict = Lances.Get(NumeroDeLances, ReturnType='dict')
     LancesBlaze = [[],[],[]]
     for lance in LancesBlaze_dict:
         LancesBlaze[0].append(Lances.Converter.DictToList(lance))
@@ -35,7 +37,7 @@ for gen in range(0,50):
             min_i = 0
 
         print(f'\n[GERAÇÃO: {gen}]')
-        Bot.RunCycle(LanceBlazeAtual=lance, Condicoes=(Bot.varRotina['ErrosIA_temp'] <= 1))
+        Bot.RunCycle(LanceBlazeAtual=lance, Condicoes=(Bot.varRotina['ErrosIA_temp'] < 2))
 
         print('\n')
         print(f'Sugestão da IA foi: {Lances.Converter.Cor(Bot.varRotina["SugestaoIA"], input_type="IA", output_type="string_ptbr")}')
@@ -50,6 +52,8 @@ for gen in range(0,50):
         
         h = '\n\n\n-------------------------[Saldo do bot atual]-------------------------'
         ic(h)
+        ic(Bot.varRotina['NumTotalDeApostas'], NumeroDeLances)
+        ic(Bot.varRotina['ErrosIA_temp'],Bot.varRotina['AcertosIA_temp'])
         ic(Bot.Carteira.Saldo, Bot.varRotina['LucroPerdaRodada'])
 
         h = '\n-------------------------[Registros]-------------------------'

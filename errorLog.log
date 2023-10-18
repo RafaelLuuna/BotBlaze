@@ -1,7 +1,7 @@
 Traceback (most recent call last):
-  File "c:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\Bot_completo.py", line 181, in <module>
+  File "c:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\Bot_completo.py", line 169, in <module>
     Bot.EsperarLance()
-  File "c:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\Scripts\BlazeFunctions\Bot.py", line 81, in EsperarLance
+  File "c:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\Scripts\BlazeFunctions\Bot.py", line 73, in EsperarLance
     LanceBlazeAtual = Lances.Get(1)[0]
                       ^^^^^^^^^^^^^
   File "c:\Users\rafael.luna\Desktop\docs pessoais\Projects\BotBlaze\BotBlaze\Scripts\BlazeFunctions\Lances.py", line 18, in Get
@@ -25,27 +25,16 @@ Traceback (most recent call last):
   File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\site-packages\urllib3\connectionpool.py", line 790, in urlopen
     response = self._make_request(
                ^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\site-packages\urllib3\connectionpool.py", line 536, in _make_request
-    response = conn.getresponse()
-               ^^^^^^^^^^^^^^^^^^
-  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\site-packages\urllib3\connection.py", line 461, in getresponse
-    httplib_response = super().getresponse()
-                       ^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\http\client.py", line 1378, in getresponse
-    response.begin()
-  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\http\client.py", line 318, in begin
-    version, status, reason = self._read_status()
-                              ^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\http\client.py", line 279, in _read_status
-    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\socket.py", line 706, in readinto
-    return self._sock.recv_into(b)
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\ssl.py", line 1311, in recv_into
-    return self.read(nbytes, buffer)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\ssl.py", line 1167, in read
-    return self._sslobj.read(len, buffer)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\site-packages\urllib3\connectionpool.py", line 467, in _make_request
+    self._validate_conn(conn)
+  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\site-packages\urllib3\connectionpool.py", line 1092, in _validate_conn
+    conn.connect()
+  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\site-packages\urllib3\connection.py", line 642, in connect
+    sock_and_verified = _ssl_wrap_socket_and_match_hostname(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\site-packages\urllib3\connection.py", line 783, in _ssl_wrap_socket_and_match_hostname
+    ssl_sock = ssl_wrap_socket(
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\rafael.luna\AppData\Local\anaconda3\envs\BotBlaze\Lib\site-packages\urllib3\util\ssl_.py", line 444, in ssl_wrap_socket
+    context.load_verify_locations(ca_certs, ca_cert_dir, ca_cert_data)
 KeyboardInterrupt

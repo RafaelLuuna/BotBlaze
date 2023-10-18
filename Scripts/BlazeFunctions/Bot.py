@@ -39,19 +39,12 @@ class bot_class:
 
 
 
-    def __init__(self, Paths, Saldo=0, name='Bot'):
-        self.Carteira  = Carteira(Saldo, name)
+    def __init__(self, Paths, name='Bot'):
         self.driver = driver_class()
         self.name = name
-        with open(Paths, 'r') as arquivo:
-            Linhas = arquivo.readlines()
-            for linha in Linhas:
-                chave, valor = linha.strip().split('=')
-                match chave:
-                    case 'ConfigPath':
-                        self.ConfigPath = valor
-                    case 'ModelPath':
-                        self.ModelPath = valor
+        self.Paths = Paths
+        self.UpdateConfig()
+        self.Carteira  = Carteira(float(self.GetConfig(['SaldoInicial'])), name)
         self.Cycle = 0
         self.varRotina = {
             'NumTotalDeApostas':0,
@@ -87,7 +80,37 @@ class bot_class:
                 pass
         print('[Saldo localizado]')
 
-    def GetConfig(self):
+    def GetConfig(self, Values):
+        Output = {}
+        if not(type(Values) is list):
+            print("Erro: O parâmetro 'Values' precisa ser do tipo 'list'. Foi retornado um dicionário vazio.")
+        else:
+            try:
+                with open(self.ConfigPath,'r') as arquivo:
+                    linhas = arquivo.readlines()
+                    for linha in linhas:
+                        chave, valor = linha.strip().split('=')
+                        if chave in Values:
+                            Output.update({chave:valor})
+
+            except FileNotFoundError:
+                print("Arquivo de configuração não encontrado.")
+            except Exception as e:
+                print(f"Erro ao atualizar variáveis: {e}")
+            if len(Output) == 1:
+                Output = next(iter(Output.values()))
+        return Output
+
+    def UpdateConfig(self):
+        with open(self.Paths, 'r') as arquivo:
+            Linhas = arquivo.readlines()
+            for linha in Linhas:
+                chave, valor = linha.strip().split('=')
+                match chave:
+                    case 'ConfigPath':
+                        self.ConfigPath = valor
+                    case 'ModelPath':
+                        self.ModelPath = valor
         try:
             with open(self.ConfigPath,'r') as arquivo:
                 linhas = arquivo.readlines()
@@ -234,7 +257,7 @@ class bot_class:
     def RunCycle(self, LanceBlazeAtual=Lances.Get(1)[0], Condicoes=True):
         print('----------------------------------------------------------------------------------')
         #-----------------------------------------------[ INICIALIZAÇÃO ]-----------------------------------------------#
-        self.GetConfig()
+        self.UpdateConfig()
 
         self.varRotina['LanceBlazeAtual'] = LanceBlazeAtual
         print('[Lances atualizados] Lance blaze atual: ',LanceBlazeAtual)
@@ -385,7 +408,7 @@ class bot_class:
                             CorNum = Lances.Converter.Cor(SugestaoIA,input_type='IA', output_type='int')
 
                     #DEFINE O VALOR QUE VAI SER APOSTADO
-                    if(not(CorNum == 0) and ErrosIA_temp < 2):
+                    if(not(CorNum == 0)):
                         if(self.ModoAtaque == True):
                             ApostaCor = self.ConstMeta
                             self.TotalApostadoBranca = ApostaCor * self.TaxaBranca_ModoAtaque                                

@@ -1,7 +1,7 @@
 Simulacao=s
 Objetivo_final=3000
 Const_meta=100
-leitura_Maxima_de_lances=6
+leitura_Maxima_de_lances=5
 Limite_de_apostas=20
 Margem_de_apostas=1000
 Piso=0

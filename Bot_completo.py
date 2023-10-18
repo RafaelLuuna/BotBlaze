@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+from icecream import ic
 import Scripts.BlazeFunctions.Lances as Lances
 from Scripts.BlazeFunctions.Bot import bot_class
 
@@ -32,38 +33,27 @@ def PrintCabecalho():
     print('__________________________________________________________________')
 
 Paths = os.path.join(script_dir,'Paths.txt')
+Bot_temp = bot_class(Paths=Paths)
+Bot_temp.RunCycle()
 
 Start = False
 while Start == False:
+    Bot_temp.UpdateConfig()
+    
 
-    with open(Paths, 'r') as arquivo:
-        Linhas = arquivo.readlines()
-        for linha in Linhas:
-            chave, valor = linha.strip().split('=')
-            match chave:
-                case 'ConfigPath':
-                    ConfigPath = valor
-                    
-    with open(ConfigPath, 'r') as arquivo:
-        Linhas = arquivo.readlines()
-        for linha in Linhas:
-            chave, valor = linha.strip().split('=')
-            match chave:
-                case 'Simulacao':
-                    match valor:
-                        case 's':
-                            GameMode = 'Simulação'
-                        case 'n':
-                            GameMode = 'Modo real'
-                case 'SaldoInicial':
-                    SaldoInicial = float(valor)
+    match Bot_temp.GetConfig(['Simulacao']):
+        case 's':
+            GameMode = 'Simulação'
+        case 'n':
+            GameMode = 'Modo real'
+
                 
     PrintCabecalho()
     print('\n[Configuração atual do bot]\n')
-    print(f'config_path: {ConfigPath}')
+    print(f'config_path: {Bot_temp.ConfigPath}')
     print(f'game_mode: {GameMode}')
     if GameMode == 'Simulação':
-        print(f'saldo_inicial: {SaldoInicial}')
+        print(f'saldo_inicial: {Bot_temp.GetConfig(["SaldoInicial"])}')
     print('\n\n[Lista de comandos]\n')
     print('> jogar')
     print('> game mode')
@@ -108,7 +98,7 @@ while Start == False:
                     inSetting = False
                 case 'alterar saldo':
                     if GameMode == 'Simulação':
-                        Write(ConfigPath, 'SaldoInicial', input('Digite o valor que deseja: '))
+                        Write(Bot_temp.ConfigPath, 'SaldoInicial', input('Digite o valor que deseja: '))
                         Comando = 'pass'
                         inSetting = False
                 case 'return':
@@ -136,13 +126,10 @@ while Start == False:
                         newValue = 'n'
                     case _:
                         print('\n    Erro: opção inválida\n')
-            Write(ConfigPath, 'Simulacao', newValue)
+            Write(Bot_temp.ConfigPath, 'Simulacao', newValue)
         case 'print config':
             print('\n\n\n')
-            Bot_temp = bot_class(ConfigPath)
-            Bot_temp.RunCycle()
             PrintCabecalho()
-            Bot_temp.Carteira.SaldoInicial = SaldoInicial
             Bot_temp.PrintConfig()
             print(input('\nDigite qualquer coisa para continuar: '))
         case 'quit':
@@ -164,16 +151,17 @@ match GameMode:
             print('\n    Erro: saldo zerado, por favor, entre em uma conta que possua algum saldo disponível para jogar')
             time.sleep(1)
     case "Simulação":
-        Bot = bot_class(Paths=Paths, Saldo=float(SaldoInicial))
+        Bot = bot_class(Paths=Paths)
         Bot.driver.initialize_browser()
         Bot.EsperarLance()
 
 
 while Bot.Carteira.Saldo > 0:
-    Bot.RunCycle(LanceBlazeAtual=Lances.Get(1)[0])
+    Bot.RunCycle(LanceBlazeAtual=Lances.Get(1)[0], Condicoes=(Bot.varRotina['ErrosIA_temp'] < 2))
     if Bot.Carteira.Saldo > 0:
-        if Bot.OpcaoDeProtecao == 5:
-            Bot.TreinarIA(num_lances=40, epochs=10, learning_rate=0.04)
+        if Bot.OpcaoDeProtecao == 5 and Bot.varRotina['ErrosIA_temp'] >= 3:
+            Bot.TreinarIA(num_lances=100, epochs=50, learning_rate=0.03)
+            Bot.EsperarLance()
         Bot.PrintLog()
         Lances.PrintLances(30)
         Bot.PrintConfig()
