@@ -3,17 +3,15 @@ import time
 import Scripts.BlazeFunctions.Lances as Lances
 from Scripts.BlazeFunctions.Bot import bot_class
 
-Bot = bot_class(ConfigPath='./Paths.txt', Saldo=1000)
+Bot = bot_class(Paths='./Paths.txt')
 Bot.driver.initialize_browser()
 Bot.EsperarLance()
 
 
 while Bot.Carteira.Saldo > 0:
 
-    Bot.RunCycle()
+    Bot.RunCycle(Condicoes=())
     if Bot.Carteira.Saldo > 0:
-        if Bot.OpcaoDeProtecao == 5:
-            Bot.TreinarIA(num_lances=40)
         Bot.PrintLog()
         Lances.PrintLances(30)
         Bot.PrintConfig()

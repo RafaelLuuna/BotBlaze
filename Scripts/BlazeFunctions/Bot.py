@@ -21,6 +21,8 @@ import datetime
 import Lances as Lances
 import IA_Functions
 
+import json
+
 
 class Carteira:
 
@@ -167,11 +169,11 @@ class bot_class:
         except Exception as e:
             print(f"Erro ao atualizar variáveis: {e}")
 
-    def PagarPremio(self, LanceBlazeAtual):
+    def PagarPremio(self, LanceBlazeAtual, PrintLog=True):
         
-
-        print(f'\nApostado: Branca={self.TotalApostadoBranca} , Vermelha={self.TotalApostadoVermelha} , Preta={self.TotalApostadoPreta}')
-        print(f'Blaze sorteou: {LanceBlazeAtual[1]}')
+        if PrintLog == True:
+            print(f'\nApostado: Branca={self.TotalApostadoBranca} , Vermelha={self.TotalApostadoVermelha} , Preta={self.TotalApostadoPreta}')
+            print(f'Blaze sorteou: {LanceBlazeAtual[1]}')
 
         ValorPremio = 0
         if(LanceBlazeAtual[1] == 'white'):
@@ -209,13 +211,14 @@ class bot_class:
             self.varRotina['ErrosIA'] += 1
             self.varRotina['ErrosIA_temp'] += 1
             self.varRotina['AcertosIA_temp'] = 0
+        if PrintLog == True:
+            print('Pagou:',ValorPremio)
 
-        print('Pagou:',ValorPremio)
-
-    def CalcularAposta(self, Saldo, Meta, Muliplicador):
+    def CalcularAposta(self, Saldo, Meta, Muliplicador, PrintLog=True):
         ApostaAtual = round((Meta - Saldo)/Muliplicador+0.1,1)
         Carteira_temporaria = Saldo - (ApostaAtual)
-        print('[Calculando aposta atual]')
+        if PrintLog == True:
+            print('[Calculando aposta atual]')
         while(Carteira_temporaria + (ApostaAtual * Muliplicador) <= Meta):
             ApostaAtual = round((Meta - Carteira_temporaria)/Muliplicador+0.1,1)
             Carteira_temporaria = Saldo - (ApostaAtual)
@@ -254,13 +257,14 @@ class bot_class:
 
         self.model.save(self.ModelPath)
 
-    def RunCycle(self, LanceBlazeAtual=Lances.Get(1)[0], Condicoes=True):
-        print('----------------------------------------------------------------------------------')
+    def RunCycle(self, LanceBlazeAtual=Lances.Get(1)[0], Condicoes=True, PrintLog=True, IA_list=[]):
         #-----------------------------------------------[ INICIALIZAÇÃO ]-----------------------------------------------#
         self.UpdateConfig()
 
         self.varRotina['LanceBlazeAtual'] = LanceBlazeAtual
-        print('[Lances atualizados] Lance blaze atual: ',LanceBlazeAtual)
+        if PrintLog == True:
+            print('----------------------------------------------------------------------------------')
+            print('[Lances atualizados] Lance blaze atual: ',LanceBlazeAtual)
 
         #QUANDO NÃO DETECTAR O SALDO, PEDIRÁ PARA FAZER LOGIN
         if self.Simulacao == False:
@@ -305,11 +309,10 @@ class bot_class:
             AcertosIA_temp = 0
             ErrosIA_temp = 0
             self.model = load_model(self.ModelPath.replace('\\','/'))
-            SugestaoIA = self.model.predict([Lances.Get(self.LeituraMáximaDeLances,ReturnType='cor')])[0]
-            print('previsão da IA: ',Lances.Converter.Cor(SugestaoIA,input_type='IA',output_type='string_ptbr'))
-
             self.Cycle += 1
-            print('[First cycle complete]')
+
+            if PrintLog == True:
+                print('[First cycle complete]')
         else:
             NumTotalDeApostas = self.varRotina['NumTotalDeApostas']
             DeltaTempo = self.varRotina['DeltaTempo']
@@ -328,11 +331,14 @@ class bot_class:
             SaldoBase = self.varRotina['SaldoBase']
             SaldoInicialRodada = self.varRotina['SaldoInicialRodada']
 
+
+        if len(IA_list) == 0:
+            IA_list = [Lances.Get(self.LeituraMáximaDeLances,ReturnType='cor')]
+
         if self.OpcaoDeProtecao == 5:
-            SugestaoIA = self.model.predict([Lances.Get(self.LeituraMáximaDeLances,ReturnType='cor')])[0]
+            SugestaoIA = self.model.predict(IA_list)[0]
         
         #-----------------------------------------------[ ROTINA DO BOT ]-----------------------------------------------#
-        print(f'\nSaldo antes de apostar: {self.Carteira.Saldo}')
         if self.Carteira.Saldo > 0:
 
             
@@ -427,11 +433,12 @@ class bot_class:
                 self.TotalApostado = self.TotalApostadoBranca + self.TotalApostadoVermelha + self.TotalApostadoPreta
                 self.Apostar()
 
-                print('apostou:', self.TotalApostado, '[Branca: ', self.TotalApostadoBranca,' | Vermelha: ', self.TotalApostadoVermelha,' | Preta: ', self.TotalApostadoPreta,']')
+                if PrintLog == True:
+                    print('apostou:', self.TotalApostado, '[Branca: ', self.TotalApostadoBranca,' | Vermelha: ', self.TotalApostadoVermelha,' | Preta: ', self.TotalApostadoPreta,']')
+                    print(f'SaldoInicial: {SaldoInicialRodada}, SaldoAtual: {self.Carteira.Saldo}')
 
                 ContagemAposta = ContagemAposta + 1
 
-            print(f'SaldoInicial: {SaldoInicialRodada}, SaldoAtual: {self.Carteira.Saldo}')
 
             self.LucroPerda = self.Carteira.Saldo - self.Carteira.SaldoInicial
 
@@ -467,7 +474,8 @@ class bot_class:
                 'SaldoInicialRodada':SaldoInicialRodada
             }
         else:
-            print('[-----------------QUEBROU-----------------]')
+            if PrintLog == True:
+                print('[-----------------QUEBROU-----------------]')
 
     def PrintLog(self):
         NumTotalDeApostas = self.varRotina['NumTotalDeApostas']

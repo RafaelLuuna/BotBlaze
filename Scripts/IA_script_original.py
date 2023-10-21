@@ -22,7 +22,7 @@ from BlazeFunctions.IA_Functions import AgruparSequancias
 # np.set_printoptions(threshold=np.inf)
    
   
-input_size = 5
+input_size = 20
 
 LancesBlaze = Lances.Get(300, ReturnType='cor')
 

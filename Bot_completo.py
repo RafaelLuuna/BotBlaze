@@ -39,6 +39,8 @@ Bot_temp.RunCycle()
 Start = False
 while Start == False:
     Bot_temp.UpdateConfig()
+    Bot_temp.Carteira.Saldo = Bot_temp.GetConfig(['SaldoInicial'])
+    Bot_temp.Carteira.SaldoInicial = Bot_temp.GetConfig(['SaldoInicial'])
     
 
     match Bot_temp.GetConfig(['Simulacao']):

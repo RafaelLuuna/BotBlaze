@@ -113,12 +113,6 @@ class Converter:
             return output
 
 
-        
-            
-
-
-
-
 def PrintLances(num_lances=1, lances_list=[]):
     if len(lances_list) == 0:
         lst = Get(num_lances, ReturnType='var', Values=['roll', 'color'])
