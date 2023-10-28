@@ -12,16 +12,16 @@ gen = 0
 resultados = []
 
 
-for gen in range(0,200):
+for gen in range(0,100):
 
     Bot = ''
 
     Bot = bot_class('./Paths.txt', name=f'bot{gen}')
 
 
-    leituraMaxima = 20
+    leituraMaxima = 6
 
-    NumeroDeLances = 500 + int(random.random()*500)
+    NumeroDeLances = 50 + int(random.random()*50)
 
     LancesBlaze_dict = Lances.Get(NumeroDeLances, ReturnType='dict')
     LancesBlaze = [[],[],[]]
@@ -62,7 +62,7 @@ for gen in range(0,200):
             log['#'] = Bot.varRotina['NumTotalDeApostas']
             log['Saldo_Start'] = Bot.Carteira.Saldo
 
-            Bot.RunCycle(LanceBlazeAtual=lance, Condicoes=(Bot.varRotina['ErrosIA_temp'] < 2),PrintLog=False, IA_list=[LancesBlaze[1][min_i:i]])
+            Bot.RunCycle(LanceBlazeAtual=lance, IA_list=[LancesBlaze[1][min_i:i]])
 
             log['ApostaBranca'] = Bot.TotalApostadoBranca
             log['ApostaVermelha'] = Bot.TotalApostadoVermelha
@@ -82,14 +82,15 @@ for gen in range(0,200):
             if Bot.Carteira.Saldo - Bot.varRotina['ApostaAtual'] <=Bot.piso:
                 break
             
-            h = '\n\n\n-------------------------[Saldo do bot atual]-------------------------'
-            ic(h)
-            LancesCarregados = NumeroDeLances - leituraMaxima
-            ic(min_i)
-            ic(Bot.name)
-            ic(Bot.varRotina['NumTotalDeApostas'], LancesCarregados )
-            ic(Bot.varRotina['ErrosIA_temp'],Bot.varRotina['AcertosIA_temp'])
-            ic(Bot.Carteira.Saldo, Bot.varRotina['LucroPerdaRodada'])
+            # SugestaoIA = Lances.Converter.Cor(Bot.varRotina['SugestaoIA'],input_type='IA',output_type='string_ptbr')
+            # h = '\n\n\n-------------------------[Saldo do bot atual]-------------------------'
+            # ic(h)
+            # LancesCarregados = NumeroDeLances - leituraMaxima
+            # ic(min_i)
+            # ic(Bot.name)
+            # ic(Bot.varRotina['NumTotalDeApostas'], LancesCarregados )
+            # ic(SugestaoIA)
+            # ic(Bot.Carteira.Saldo, Bot.varRotina['LucroPerdaRodada'])
 
     bot_log['NumLances'] = Bot.varRotina['NumTotalDeApostas']
     bot_log['PicoMaximo'] = Bot.PicoMaximo

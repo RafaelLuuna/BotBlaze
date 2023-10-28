@@ -40,7 +40,6 @@ class Carteira:
 class bot_class:
 
 
-
     def __init__(self, Paths, name='Bot'):
         self.driver = driver_class()
         self.name = name

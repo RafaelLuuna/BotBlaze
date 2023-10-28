@@ -10,7 +10,7 @@ Bot.EsperarLance()
 
 while Bot.Carteira.Saldo > 0:
 
-    Bot.RunCycle(Condicoes=())
+    Bot.RunCycle()
     if Bot.Carteira.Saldo > 0:
         Bot.PrintLog()
         Lances.PrintLances(30)

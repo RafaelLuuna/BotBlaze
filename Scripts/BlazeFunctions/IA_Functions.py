@@ -9,17 +9,19 @@ import matplotlib.pyplot as plt
 import Lances as Lances
 
 
-def PlotarGraficos(history, modelName):
+def PlotarGraficos(history, modelName, printVal=True):
     losses = history.history['loss']
-    val_losses = history.history['val_loss']
     accuracies = history.history['accuracy']
-    val_accuracies = history.history['val_accuracy']
+    if printVal == True:
+        val_losses = history.history['val_loss']
+        val_accuracies = history.history['val_accuracy']
 
     # Plotando as perdas
     plt.figure(figsize=(12, 6))
     plt.subplot(1, 2, 1)
     plt.plot(history.epoch, losses, label='Loss', color='blue', marker='o')
-    plt.plot(history.epoch, val_losses, label='Val_Loss', color='green', marker='o')
+    if printVal == True:
+        plt.plot(history.epoch, val_losses, label='Val_Loss', color='green', marker='o')
     plt.title('Loss Over Time '+ modelName)
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
@@ -28,7 +30,8 @@ def PlotarGraficos(history, modelName):
     # Plotando as métricas de precisão
     plt.subplot(1, 2, 2)
     plt.plot(history.epoch, accuracies, label='Accuracy', color='blue', marker='o')
-    plt.plot(history.epoch, val_accuracies, label='Val_Accuracie', color='green', marker='o')
+    if printVal == True:
+        plt.plot(history.epoch, val_accuracies, label='Val_Accuracie', color='green', marker='o')
     plt.title('Accuracy Over Time '+ modelName)
     plt.xlabel('Epoch')
     plt.ylabel('Accuracy')
