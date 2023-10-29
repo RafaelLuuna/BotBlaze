@@ -81,6 +81,17 @@ class bot_class:
                 pass
         print('[Saldo localizado]')
 
+    def SetConfig(self, FilePath, key, value):
+        with open(FilePath, 'r') as arquivo:
+            Linhas = arquivo.readlines()
+            for i, linha in enumerate(Linhas):
+                chave, valor = linha.strip().split('=')
+                if chave == key:
+                    Linhas[i] = key + '=' + value + '\n'
+        with open(FilePath, 'w') as arquivo:
+            arquivo.writelines(Linhas)
+            arquivo.flush()
+
     def GetConfig(self, Values):
         Output = {}
         if not(type(Values) is list):
@@ -227,24 +238,15 @@ class bot_class:
         return ApostaAtual
 
     def Apostar(self):
-        if self.TotalApostadoBranca > 0:
-            self.Carteira.AddSaldo(-self.TotalApostadoBranca)
-            if self.Simulacao == False:
-                self.driver.incluir_aposta(self.TotalApostadoBranca)
-                self.driver.selecionar_cor(0)
-                self.driver.apostar(0)
-        if self.TotalApostadoVermelha > 0:
-            self.Carteira.AddSaldo(-self.TotalApostadoVermelha)
-            if self.Simulacao == False:
-                self.driver.incluir_aposta(self.TotalApostadoVermelha)
-                self.driver.selecionar_cor(1)
-                self.driver.apostar(1)
-        if self.TotalApostadoPreta > 0:
-            self.Carteira.AddSaldo(-self.TotalApostadoPreta)
-            if self.Simulacao == False:
-                self.driver.incluir_aposta(self.TotalApostadoPreta)
-                self.driver.selecionar_cor(2)
-                self.driver.apostar(2)
+        if self.Simulacao == False:
+            if self.TotalApostadoBranca > 0:
+                    self.driver.apostar(0,self.TotalApostadoBranca)
+            if self.TotalApostadoVermelha > 0:
+                    self.driver.apostar(1,self.TotalApostadoVermelha)
+            if self.TotalApostadoPreta > 0:
+                    self.driver.apostar(2,self.TotalApostadoPreta)
+        self.Carteira.AddSaldo(-self.TotalApostado)
+
 
     def TreinarIA(self, num_lances, epochs=10, learning_rate=0.01):
         LancesBlaze = Lances.Get(num_lances, ReturnType='cor')
@@ -334,7 +336,7 @@ class bot_class:
         if len(IA_list) == 0:
             IA_list = [Lances.Get(self.LeituraMáximaDeLances,ReturnType='cor')]
 
-        if self.OpcaoDeProtecao == 5:
+        if self.OpcaoDeProtecao == 5 or self.OpcaoDeProtecao == 6:
             SugestaoIA = self.model.predict(IA_list)[0]
         
         #-----------------------------------------------[ ROTINA DO BOT ]-----------------------------------------------#
@@ -385,12 +387,12 @@ class bot_class:
                 MetaAtual = SaldoBase + self.ConstMeta
 
             #-----------------------------------------------[ REGRAS DE APOSTA ]-----------------------------------------------#
-        
-            ApostaAtual = self.CalcularAposta(Saldo=self.Carteira.Saldo, Meta=MetaAtual, Muliplicador=14)
+            if self.ModoAtaque == False:
+                ApostaAtual = self.CalcularAposta(Saldo=self.Carteira.Saldo, Meta=MetaAtual, Muliplicador=14)
 
 
 
-            if(ContagemAposta < self.Limite_Max_Apostas and self.Carteira.Saldo < self.Objetivo_final and self.Pausa == False and self.Carteira.Saldo - ApostaAtual > self.piso and Condicoes == True):
+            if(self.Carteira.Saldo < self.Objetivo_final and self.Pausa == False and self.Carteira.Saldo - ApostaAtual > self.piso and Condicoes == True):
                 self.TotalApostadoBranca = ApostaAtual
                 if(self.SalvarNaCor == True):
                     #DEFINE A OPÇÃO SELECIONADA
@@ -411,6 +413,12 @@ class bot_class:
                                 CorNum = CorMaisComum
                         case 5:
                             CorNum = Lances.Converter.Cor(SugestaoIA,input_type='IA', output_type='int')
+                        case 6:
+                            CorNum = Lances.Converter.Cor(SugestaoIA,input_type='IA', output_type='int')
+                            if CorNum == 1:
+                                CorNum = 2
+                            elif CorNum == 2:
+                                CorNum = 1
 
                     #DEFINE O VALOR QUE VAI SER APOSTADO
                     if(not(CorNum == 0)):
@@ -546,6 +554,8 @@ class bot_class:
                 txtOpcaoProtecao = '4 - Repetir a última cor'
             case 5:
                 txtOpcaoProtecao = '5 - Sugestão da IA'
+            case 6:
+                txtOpcaoProtecao = '6 - Sugestão da IA invertida'
         print('Opcao de protecao: ',txtOpcaoProtecao)
         print('Taxa Cor:' , self.TaxaCor)
 

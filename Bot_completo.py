@@ -159,15 +159,20 @@ match GameMode:
 
 
 while Bot.Carteira.Saldo > 0:
-    Bot.RunCycle(LanceBlazeAtual=Lances.Get(1)[0], Condicoes=(Bot.varRotina['ErrosIA_temp'] < 2))
+    Bot.RunCycle()
     if Bot.Carteira.Saldo > 0:
-        if Bot.OpcaoDeProtecao == 5 and Bot.varRotina['ErrosIA_temp'] >= 3:
-            Bot.TreinarIA(num_lances=100, epochs=50, learning_rate=0.03)
-            Bot.EsperarLance()
-        Bot.PrintLog()
-        Lances.PrintLances(30)
-        Bot.PrintConfig()
+        if Bot.varRotina['ErrosIA_temp'] > 0:
+            Bot.SetConfig(Bot.ConfigPath, key='Tipo_de_protecao', value='6')
+        if Bot.varRotina['AcertosIA_temp'] > 0:
+            Bot.SetConfig(Bot.ConfigPath, key='Tipo_de_protecao', value='5')
 
+        if Lances.CountLances(10,[0]) > 0:
+            Bot.SetConfig(Bot.ConfigPath, key='TaxaCor', value='ATK-0.5')
+        else:
+            Bot.SetConfig(Bot.ConfigPath, key='TaxaCor', value='ATK-0.1')
+
+        Bot.PrintLog()
+        Bot.PrintConfig()
         Bot.EsperarLance()
         Bot.PagarPremio(Lances.Get(1)[0])
 

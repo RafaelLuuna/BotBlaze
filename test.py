@@ -6,25 +6,27 @@ from keras.models import load_model
 
 final_list = []
 
-with open('.\Análises\Lances_comuns.csv', 'r') as arquivo:
-    linhas = arquivo.readlines()
-    
-    for linha in linhas:
-        x, y = linha.replace('\n','').replace('\ufeff','').split(';')
-        final_list.append([x,y])
 
-print(final_list)
-
-
-quit()
 # LancesBlaze = Lances.Get(20000, ReturnType='dict', Values=['roll','color'])
+LancesBlaze = Lances.Get(29000, ReturnType='cor')
 
 # model = load_model('.\IA\Models\model_dense_input20_output2.keras')
 
 
-# LeituraMaxima = 20
+LeituraMaxima = 20
 
-# for i, Lance in enumerate(LancesBlaze):
+for i in LancesBlaze:
+    final_list.append(str(i)+';\n')
+
+
+with open('C:/Users/rafael.luna/Desktop/docs pessoais/Projects/BotBlaze/BotBlaze/Análises/Lances.csv', 'w') as arquivo:
+    arquivo.writelines(final_list)
+
+
+
+quit()
+
+#for i, Lance in enumerate(LancesBlaze):
 #     print(f'\n# {i}')
 #     if i > LeituraMaxima:
 #         input_layer = []

@@ -26,9 +26,9 @@ from BlazeFunctions.IA_Functions import AgruparSequancias
   
 input_size = 6
 
-LancesBlaze = Lances.Get(600, ReturnType='cor')
+# LancesBlaze = Lances.Get(600, ReturnType='cor')
 
-train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze, input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
+# train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze, input_size=input_size, return_lst=['train_x','val_x', 'train_y', 'val_y'])
 
 
 
@@ -40,19 +40,25 @@ train_x, val_x, train_y, val_y = SepararTreinamento(input=LancesBlaze, input_siz
 # train_x = np.array(EncapsularSequencias(train_x))
 # val_x = np.array(EncapsularSequencias(val_x))
 
-# train_x = []
-# train_y = []
+train_x = []
+train_y = []
+val_x = []
+val_y = []
 
-# with open('C:/Users/rafael.luna/Desktop/docs pessoais/Projects/BotBlaze/BotBlaze/Análises/Lances_comuns.csv', 'r') as arquivo:
-#     linhas = arquivo.readlines()
+with open('C:/Users/rafael.luna/Desktop/docs pessoais/Projects/BotBlaze/BotBlaze/Análises/Lances_comuns.csv', 'r') as arquivo:
+    linhas = arquivo.readlines()
     
-#     for linha in linhas:
-#         x, y = linha.replace('\n','').replace('\ufeff','').split(';')
-#         x_list = []
-#         for i in x:
-#           x_list.append(int(i))
-#         train_x.append(x_list)
-#         train_y.append(Lances.Converter.Cor(int(y),input_type='int',output_type='IA'))
+    for iLinha, linha in enumerate(linhas):
+        x, y = linha.replace('\n','').replace('\ufeff','').split(';')
+        x_list = []
+        for i in x:
+          x_list.append(int(i))
+        if iLinha < 740:
+          val_x.append(x_list)
+          val_y.append(Lances.Converter.Cor(int(y),input_type='int',output_type='IA'))
+        else:
+          train_x.append(x_list)
+          train_y.append(Lances.Converter.Cor(int(y),input_type='int',output_type='IA'))
 
 
 

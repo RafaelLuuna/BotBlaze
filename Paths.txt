@@ -1,2 +1,2 @@
-ConfigPath=./Configs/Config_2.txt
+ConfigPath=./Configs/Config.txt
 ModelPath=./IA/Models/model_dense_input6_output2.keras

@@ -25,8 +25,9 @@ class driver_class:
         self.driver = webdriver.Chrome(service=chrome_service, options=ChromeOptions)
         print('[Inicialndo chromedriver]')
         self.driver.get(url)
-    
-    def incluir_aposta(self, Valor):
+
+    def apostar(self, Cor, Valor):
+        print('[Apostando no driver]')
         try:
             input_element = self.driver.find_element(By.CLASS_NAME, 'input-field')
             if(Valor > 0):
@@ -35,8 +36,6 @@ class driver_class:
                 input_element.send_keys(1)
         except Exception as e:
             print(f"Erro ao incluir aposta: {e}")
-
-    def selecionar_cor(self, Cor):
         match Cor:
             case 0:
                 CorPath = 2
@@ -46,16 +45,14 @@ class driver_class:
                 CorPath = 3
         Path = f'//*[@id="roulette-controller"]/div[1]/div[2]/div[2]/div/div[{CorPath}]'
         try:
-            click_button = self.driver.find_element(By.XPATH, Path)
-            click_button.click()
+            ColorButton = self.driver.find_element(By.XPATH, Path)
+            ColorButton.click()
         except Exception as e:
             print(f"Erro ao apostar: {e}")
-    
-    def apostar(self, cor):
+        wait = WebDriverWait(self.driver, 60)
+        PlayButton = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="roulette-controller"]/div[1]/div[3]/button')))
         try:
-            wait = WebDriverWait(self.driver, 10)
-            click_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="roulette-controller"]/div[1]/div[3]/button')))
-            click_button.click()
+            PlayButton.click()
         except Exception as e:
             print(f"Erro ao apostar: {e}")
 

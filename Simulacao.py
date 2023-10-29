@@ -12,7 +12,7 @@ gen = 0
 resultados = []
 
 
-for gen in range(0,100):
+for gen in range(0,50):
 
     Bot = ''
 
